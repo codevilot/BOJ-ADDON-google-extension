@@ -1,0 +1,45 @@
+.form-horizontal.submit-form > legend {
+  padding-bottom: 3px;
+  font-size: 22px;
+  margin-top: 10px;
+}
+
+.container.content {
+  width: 90vw;
+}
+
+.problem-text-submit {
+  font-size: 15px;
+}
+
+.spread {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.spread form {
+  width: 60%;
+}
+
+.spread .desc {
+  width: 40%;
+}
+
+.form-horizontal.submit-form {
+  position: relative;
+}
+.optional_input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  opacity: 0.8;
+  padding-top: 2rem;
+  padding-left: 1rem;
+  z-index: 4;
+}
+.optional_input button {
+  width: 100%;
+}
