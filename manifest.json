@@ -1,21 +1,17 @@
 {
-    "manifest_version": 2,
-    "name": "BOJ Addon",
-    "version": "0.1.0",
-    "description": "BOJ Addon",
-    "content_scripts": [
-        {
-            "css": [
-                "styles.css"
-            ],
-            "js": [
-                "save.js",
-                "load.js"
-            ],
-            "matches": [
-                "https://www.acmicpc.net/problem/*",
-                "https://www.acmicpc.net/submit/*"
-            ]
-        }
-    ]
+  "manifest_version": 2,
+  "name": "BOJ Addon",
+  "version": "0.1.0",
+  "description": "BOJ Addon",
+  "content_scripts": [
+    {
+      "css": ["styles.css"],
+      "js": ["main.js"],
+      "matches": [
+        "https://www.acmicpc.net/problem/*",
+        "https://www.acmicpc.net/submit/*"
+      ]
+    }
+  ],
+  "type": "module"
 }
