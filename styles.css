@@ -1,22 +1,30 @@
-.content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-.content::before {
-  content: none !important;
-}
-.row {
-  grid-column-start: 1;
-  grid-column-end: 2;
-  grid-row: 2;
+.content .row {
+  width: 50% !important;
+  position: relative;
 }
 .run_div {
-  grid-column-start: 2;
-  grid-column-end: 3;
-  grid-row: 2;
-  margin-top: 40px;
+  position: absolute;
+  right: 0;
+  transform: translateX(100%);
+  width: 100%;
 }
-
+.code_area {
+  width: 100%;
+  height: 500px;
+}
+.code_run {
+  float: right;
+  padding: 10px 15px;
+  border: 0;
+  color: #fff;
+  background-color: #428bca;
+}
+.code_result {
+  width: 50%;
+}
+[class*="run_result"] {
+  border-bottom: 1px solid black;
+}
 /* .form-horizontal.submit-form > legend {
   padding-bottom: 3px;
   font-size: 22px;
