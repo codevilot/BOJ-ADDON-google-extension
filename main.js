@@ -1,6 +1,28 @@
+const sample_dictionary = [
+  "하나의 값을 입력받을 때",
+  "공백으로 구분된 한 줄의 값들을 입력받을 때",
+  "여러 줄의 값들을 입력받을 때",
+  "첫 번째 줄에 자연수 n을 입력받고, 그 다음줄에 공백으로 구분된 n개의 값들을 입력받을 때",
+  "첫 번째 줄에 자연수 n을 입력받고, 그 다음줄부터 n개의 줄에 걸쳐 한 줄에 하나의 값을 입력받을 때",
+  "하나의 값 또는 공백으로 구분된 여러 값들을 여러 줄에 걸쳐 뒤죽박죽 섞여서 입력받을 때",
+];
+const sample_object = {
+  sn0: `const input = require('fs').readFileSync("/dev/stdin").toString().trim();`,
+  sn1: `const input = require('fs').readFileSync("/dev/stdin").toString().trim().split(" ");`,
+  sn2: `const input = require('fs').readFileSync("/dev/stdin").toString().trim().split("\\n");`,
+  sn3: `const [n, ...arr] = require('fs').readFileSync("/dev/stdin").toString().trim().split(/\\s/);`,
+  sn4: `const [n, ...arr] = require('fs').readFileSync("/dev/stdin").toString().trim().split("\\n");`,
+  sn5: `const input = require('fs').readFileSync("/dev/stdin").toString().trim().split(/\\s/);
+  const n = input[0];
+  const n_arr = input.slice(1, n+1);
+  const [m, ...m_arr] = input.slice(n+1);`,
+};
+function displayAnswer(outputValue) {
+  const answer_container = document.querySelector(".code_answer");
+  answer_container.append(outputValue);
+}
 function run(inputValue, index) {
   const code = document.querySelector(".code_area").value;
-  // const [n, ...arr] = require('fs').readFileSync("/dev/stdin").toString().trim().split(" ");
   const script = `
     var console = {};
     console.log = function (text) {
@@ -18,13 +40,15 @@ function run(inputValue, index) {
           return \`${inputValue}\`
         }
       }
-      }
+    }
 
     ;`;
   const fn = new Function(script + code);
   console.log(fn());
 }
-
+function close_sample() {
+  document.querySelector(".sample_container").classList.add("displayNone");
+}
 function readInput() {
   const input_list = [];
   document
@@ -39,7 +63,27 @@ function readOutput() {
     .forEach((element) => output_list.push(element.innerHTML));
   return output_list;
 }
-(function () {
+function sample_container() {
+  const button_container_parent = document.querySelector(".run_div");
+  const button_container = document.createElement("div");
+  button_container_parent.append(button_container);
+  button_container.classList.add("sample_container");
+  sample_dictionary.forEach((element, index) => {
+    const button_item = document.createElement("button");
+    button_item.classList.add(`sn${index}`);
+    button_item.innerHTML = element;
+    button_container.append(button_item);
+  });
+  //event delegation
+  button_container.addEventListener("click", (target) => {
+    const sample_object_key = target.target.classList;
+    document.querySelector(
+      ".code_area"
+    ).innerHTML = `${sample_object[sample_object_key]}`;
+    close_sample();
+  });
+}
+function container() {
   const run_div = document.createElement("div");
   run_div.classList.add("run_div");
   const run_area = document.querySelector(".content").querySelector(".row");
@@ -48,10 +92,14 @@ function readOutput() {
   const code_area = document.createElement("textarea");
   const code_run = document.createElement("button");
   const code_result = document.createElement("pre");
+  const code_answer = document.createElement("pre");
 
   const input_list = readInput();
+  const output_list = readOutput();
   code_area.classList.add("code_area");
+  code_answer.classList.add("code_answer");
   run_div.append(code_area);
+  run_div.append(code_answer);
   run_div.append(code_result);
   run_div.append(code_run);
   code_run.classList.add("code_run");
@@ -62,5 +110,13 @@ function readOutput() {
     input_list.forEach((inputValue, index) =>
       run(inputValue.toString(), index)
     );
+    output_list.forEach((outputValue, index) =>
+      displayAnswer(outputValue.toString(), index)
+    );
   });
-})();
+}
+function init() {
+  container();
+  sample_container();
+}
+init();

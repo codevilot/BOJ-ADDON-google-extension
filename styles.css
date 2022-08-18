@@ -1,3 +1,6 @@
+[class*="run_result"] {
+  border-bottom: 1px solid black;
+}
 .content .row {
   width: 50% !important;
   position: relative;
@@ -11,6 +14,7 @@
 .code_area {
   width: 100%;
   height: 500px;
+  word-break: keep-all;
 }
 .code_run {
   float: right;
@@ -22,8 +26,21 @@
 .code_result {
   width: 50%;
 }
-[class*="run_result"] {
-  border-bottom: 1px solid black;
+.sample_container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  padding-left: 1rem;
+}
+.sample_container button {
+  display: block;
+}
+.displayNone {
+  display: none;
 }
 /* .form-horizontal.submit-form > legend {
   padding-bottom: 3px;

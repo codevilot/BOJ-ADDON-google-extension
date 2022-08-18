@@ -7,10 +7,7 @@
     {
       "css": ["styles.css"],
       "js": ["main.js"],
-      "matches": [
-        "https://www.acmicpc.net/problem/*",
-        "https://www.acmicpc.net/submit/*"
-      ]
+      "matches": ["https://www.acmicpc.net/problem/*"]
     }
   ],
   "type": "module"
