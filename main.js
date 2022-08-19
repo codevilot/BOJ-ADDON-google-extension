@@ -17,9 +17,12 @@ const sample_object = {
   const n_arr = input.slice(1, n+1);
   const [m, ...m_arr] = input.slice(n+1);`,
 };
-function displayAnswer(outputValue) {
+function displayAnswer(outputValue, index) {
   const answer_container = document.querySelector(".code_answer");
-  answer_container.append(outputValue);
+  const answer_div = document.createElement("div");
+  answer_container.append(answer_div);
+  answer_div.classList.add(`answer_result${index}`);
+  answer_div.append(outputValue);
 }
 function run(inputValue, index) {
   const code = document.querySelector(".code_area").value;
@@ -28,7 +31,7 @@ function run(inputValue, index) {
     console.log = function (text) {
       const code_result = document.querySelector(".code_result");
       var element = document.createElement("div");
-      var txt = document.createTextNode(text);
+      var txt = document.createTextNode([...arguments].reduce((acc, cur)=>acc+cur+" ", ""));
   
       element.appendChild(txt);
       element.classList.add("run_result${index}")

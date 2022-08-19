@@ -1,7 +1,8 @@
-[class*="run_result"] {
+[class*="run_result"],
+[class*="answer_result"] {
   border-bottom: 1px solid black;
 }
-.content .row {
+.content > .row {
   width: 50% !important;
   position: relative;
 }
@@ -26,6 +27,10 @@
 .code_result {
   width: 50%;
 }
+.code_answer {
+  width: 50%;
+  float: right;
+}
 .sample_container {
   position: absolute;
   top: 0;
@@ -42,6 +47,7 @@
 .displayNone {
   display: none;
 }
+
 /* .form-horizontal.submit-form > legend {
   padding-bottom: 3px;
   font-size: 22px;
