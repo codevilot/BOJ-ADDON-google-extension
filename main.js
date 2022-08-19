@@ -17,25 +17,42 @@ const sample_object = {
   const n_arr = input.slice(1, n+1);
   const [m, ...m_arr] = input.slice(n+1);`,
 };
+
 function displayAnswer(outputValue, index) {
-  const answer_container = document.querySelector(".code_answer");
+  const code_result = document
+    .querySelector(".code_result")
+    .querySelector(`.run_result${index}`);
   const answer_div = document.createElement("div");
-  answer_container.append(answer_div);
+  const run_output = code_result.querySelector(`.run_output${index}`);
+  code_result.append(answer_div);
   answer_div.classList.add(`answer_result${index}`);
   answer_div.append(outputValue);
+
+  if (answer_div.innerHTML.trim() === run_output.innerHTML.trim()) {
+    answer_div.classList.add("correct");
+  } else {
+    answer_div.classList.add("wrong");
+  }
+}
+function clearOutput() {
+  const code_result = document.querySelector(".code_result");
+  code_result.innerHTML = "";
 }
 function run(inputValue, index) {
   const code = document.querySelector(".code_area").value;
   const script = `
     var console = {};
-    console.log = function (text) {
+      console.log = function (text) {
       const code_result = document.querySelector(".code_result");
-      var element = document.createElement("div");
-      var txt = document.createTextNode([...arguments].reduce((acc, cur)=>acc+cur+" ", ""));
-  
-      element.appendChild(txt);
-      element.classList.add("run_result${index}")
-      code_result.appendChild(element);
+      const code_evaluation = document.createElement("div");
+      const run_output = document.createElement("div");
+      const txt = document.createTextNode([...arguments].reduce((acc, cur)=>acc+cur+" ", ""));
+      
+      code_evaluation.classList.add("run_result${index}")
+      code_result.appendChild(code_evaluation);
+      code_evaluation.append(run_output);
+      run_output.appendChild(txt);
+      run_output.classList.add(\`run_output${index}\`)
     }
     require = function (fs){
       return {
@@ -94,8 +111,8 @@ function container() {
 
   const code_area = document.createElement("textarea");
   const code_run = document.createElement("button");
-  const code_result = document.createElement("pre");
-  const code_answer = document.createElement("pre");
+  const code_result = document.createElement("div");
+  const code_answer = document.createElement("div");
 
   const input_list = readInput();
   const output_list = readOutput();
@@ -110,6 +127,7 @@ function container() {
   code_result.classList.add("code_result");
 
   code_run.addEventListener("click", () => {
+    clearOutput();
     input_list.forEach((inputValue, index) =>
       run(inputValue.toString(), index)
     );

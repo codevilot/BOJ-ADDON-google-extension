@@ -1,6 +1,19 @@
-[class*="run_result"],
-[class*="answer_result"] {
+[class*="run_result"] {
   border-bottom: 1px solid black;
+  display: flex;
+  gap: 1rem;
+}
+[class*="answer_result"].correct {
+  color: green;
+}
+[class*="answer_result"].wrong {
+  color: red;
+}
+[class*="answer_result"].correct::after {
+  content: "⭕";
+}
+[class*="answer_result"].wrong::after {
+  content: "❌";
 }
 .content > .row {
   width: 50% !important;
@@ -24,13 +37,7 @@
   color: #fff;
   background-color: #428bca;
 }
-.code_result {
-  width: 50%;
-}
-.code_answer {
-  width: 50%;
-  float: right;
-}
+
 .sample_container {
   position: absolute;
   top: 0;
