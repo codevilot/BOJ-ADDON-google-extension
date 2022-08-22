@@ -5,6 +5,7 @@
   "description": "BOJ Addon",
   "content_scripts": [
     {
+      "html": ["/editor/index.html"],
       "css": ["styles.css"],
       "js": ["main.js"],
       "matches": ["https://www.acmicpc.net/problem/*"]

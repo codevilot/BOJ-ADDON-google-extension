@@ -88,19 +88,27 @@ function sample_container() {
   const button_container = document.createElement("div");
   button_container_parent.append(button_container);
   button_container.classList.add("sample_container");
+  const close_button = document.createElement("button");
+  close_button.classList.add("code_sample_close_button");
+  button_container.append(close_button);
+  close_button.innerHTML = "❌";
   sample_dictionary.forEach((element, index) => {
     const button_item = document.createElement("button");
     button_item.classList.add(`sn${index}`);
     button_item.innerHTML = element;
     button_container.append(button_item);
   });
-  //event delegation
   button_container.addEventListener("click", (target) => {
     const sample_object_key = target.target.classList;
-    document.querySelector(
-      ".code_area"
-    ).innerHTML = `${sample_object[sample_object_key]}`;
-    close_sample();
+    if (sample_object[sample_object_key]) {
+      document.querySelector(
+        ".code_area"
+      ).innerHTML = `${sample_object[sample_object_key]}`;
+      close_sample();
+    }
+    if (target.target.classList.value === "code_sample_close_button") {
+      close_sample();
+    }
   });
 }
 function container() {

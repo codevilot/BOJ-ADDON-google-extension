@@ -2,18 +2,32 @@
   border-bottom: 1px solid black;
   display: flex;
   gap: 1rem;
+  white-space: pre-wrap;
 }
-[class*="answer_result"].correct {
-  color: green;
-}
-[class*="answer_result"].wrong {
-  color: red;
+[class*="answer_result"] {
+  position: relative;
 }
 [class*="answer_result"].correct::after {
+  color: red;
   content: "⭕";
+  position: absolute;
+  top: 0;
+  right: -100%;
 }
 [class*="answer_result"].wrong::after {
+  color: green;
   content: "❌";
+  position: absolute;
+  top: 0;
+  right: -100%;
+}
+.code_sample_close_button {
+  position: absolute;
+  right: 1rem;
+  border: 0;
+  background: 0;
+  font-size: 2rem;
+  filter: brightness(100);
 }
 .content > .row {
   width: 50% !important;
@@ -29,6 +43,9 @@
   width: 100%;
   height: 500px;
   word-break: keep-all;
+  font-family: "Menlo", "Monaco", "Consolas", "Source Code Pro", "Courier New",
+    monospace;
+  padding: 1rem;
 }
 .code_run {
   float: right;
@@ -39,6 +56,7 @@
 }
 
 .sample_container {
+  height: 500px;
   position: absolute;
   top: 0;
   left: 0;
