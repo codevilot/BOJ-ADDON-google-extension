@@ -1,34 +1,3 @@
-[class*="run_result"] {
-  border-bottom: 1px solid black;
-  display: flex;
-  gap: 1rem;
-  white-space: pre-wrap;
-}
-[class*="answer_result"] {
-  position: relative;
-}
-[class*="answer_result"].correct::after {
-  color: red;
-  content: "⭕";
-  position: absolute;
-  top: 0;
-  right: -100%;
-}
-[class*="answer_result"].wrong::after {
-  color: green;
-  content: "❌";
-  position: absolute;
-  top: 0;
-  right: -100%;
-}
-.code_sample_close_button {
-  position: absolute;
-  right: 1rem;
-  border: 0;
-  background: 0;
-  font-size: 2rem;
-  filter: brightness(100);
-}
 .content > .row {
   width: 50% !important;
   position: relative;
@@ -38,25 +7,11 @@
   right: 0;
   transform: translateX(100%);
   width: 100%;
+  height: 100%;
 }
-.code_area {
-  width: 100%;
-  height: 500px;
-  word-break: keep-all;
-  font-family: "Menlo", "Monaco", "Consolas", "Source Code Pro", "Courier New",
-    monospace;
-  padding: 1rem;
-}
-.code_run {
-  float: right;
-  padding: 10px 15px;
-  border: 0;
-  color: #fff;
-  background-color: #428bca;
-}
-
-.sample_container {
-  height: 500px;
+.input_selector {
+  transform: translate(100%);
+  z-index: 1;
   position: absolute;
   top: 0;
   left: 0;
@@ -66,55 +21,9 @@
   padding-bottom: 2rem;
   padding-left: 1rem;
 }
-.sample_container button {
-  display: block;
+.input_selector button {
+  display: flex;
 }
 .displayNone {
   display: none;
 }
-
-/* .form-horizontal.submit-form > legend {
-  padding-bottom: 3px;
-  font-size: 22px;
-  margin-top: 10px;
-}
-
-.container.content {
-  width: 90vw;
-}
-
-.problem-text-submit {
-  font-size: 15px;
-}
-
-.spread {
-  display: flex;
-  flex-direction: row-reverse;
-}
-
-.spread form {
-  width: 60%;
-}
-
-.spread .desc {
-  width: 40%;
-}
-
-.form-horizontal.submit-form {
-  position: relative;
-}
-.optional_input {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #000;
-  opacity: 0.8;
-  padding-top: 2rem;
-  padding-left: 1rem;
-  z-index: 4;
-}
-.optional_input button {
-  width: 100%;
-} */
