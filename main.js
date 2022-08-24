@@ -73,15 +73,18 @@ function createIframeEvent() {
       const run =function(inputValue, index){
         console.log = function(){
           const body = document.querySelector(".code_output_wrapper");
-          const run_wrapper =document.createElement("div");
-          const code_evaluation = document.createElement("div");
+          if(document.querySelectorAll(".run_wrapper"+index)){
+            const run_wrapper =document.createElement("div");
+            run_wrapper.classList.add("run_wrapper"+index);            
+            body.append(run_wrapper);
+            const code_evaluation = document.createElement("div");
+            run_wrapper.append(code_evaluation);
+            code_evaluation.classList.add("code_evaluation"+index);
+          }
           const txt = document.createTextNode([...arguments].reduce((acc, cur)=> 
           typeof cur==="object" ? acc+JSON.stringify(cur) : acc+cur+" ", ""));
-          body.append(run_wrapper)
-          run_wrapper.classList.add("run_wrapper"+index);
-          run_wrapper.append(code_evaluation);
-          code_evaluation.classList.add("code_evaluation"+index);
-          code_evaluation.appendChild(txt);
+          const code_evaluation = document.querySelector(".code_evaluation"+index);
+          code_evaluation.append(txt);
         }
 
         require = function(fs){
