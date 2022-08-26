@@ -40,14 +40,14 @@ function readInput() {
   const input_list = [];
   document
     .querySelectorAll(`[id*="sample-input-"]`)
-    .forEach((element) => input_list.push(`${element.innerHTML}`));
+    .forEach((element) => input_list.push(`${element.innerText}`));
   return input_list;
 }
 function readOutput() {
   const output_list = [];
   document
     .querySelectorAll(`[id*="sample-output-"]`)
-    .forEach((element) => output_list.push(element.innerHTML));
+    .forEach((element) => output_list.push(element.innerText));
   return output_list;
 }
 const IFRAMECSS = `body{margin:0px;}
