@@ -133,17 +133,19 @@ function createIframeEvent(sample_example) {
             run_wrapper.append(code_evaluation);
             code_evaluation.classList.add("code_evaluation"+index);
           }
-          const txt = document.createTextNode([...arguments].reduce((acc, cur)=> 
-          typeof cur==="object" ? acc+JSON.stringify(cur) : acc+cur+" ", ""));
+          const txt = document.createTextNode([...arguments].reduce((acc, cur)=>
+          cur instanceof Set ||cur instanceof Map ? acc+JSON.stringify([...cur]) :
+          cur instanceof Array || cur instanceof Object ===true ? acc+JSON.stringify(cur):
+          acc+cur+" ", ""))
+
           const code_evaluation = document.querySelector(".code_evaluation"+index);
           code_evaluation.append(txt);
         }
 
-        require = function(fs){
-          return {readFileSync : function(){ return inputValue}}};
-        const value = document.querySelector(".view-lines").innerText;
-        const fn = new Function(value)
-        fn()  
+        require = function(fs){return {readFileSync : function(){ return inputValue}}};
+        const value = document.querySelector("textarea").value;
+        const fn = new Function(value);
+        fn();
       }
 
       const displayAnswer= function(outputValue,index){
