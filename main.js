@@ -24,6 +24,32 @@ const n = input[0];
 const n_arr = input.slice(1, n+1);
 const [m, ...m_arr] = input.slice(n+1);`,
 };
+function createIframeControllerEvent() {
+  const iframeController = document.querySelector(".iframe_controller");
+  const eventTarget = document.querySelector(".content").querySelector(".row");
+  iframeController.addEventListener("click", (target) => {
+    if (target.target.classList[0] === "iframe_question") {
+      eventTarget.classList.toggle("question_full");
+      target.target.classList.toggle("on");
+    }
+    if (target.target.classList[0] === "iframe_code") {
+      eventTarget.classList.toggle("code");
+      target.target.classList.toggle("on");
+    }
+    if (target.target.classList[0] === "iframe_hide_code") {
+      eventTarget.classList.toggle("hide_code");
+      target.target.classList.toggle("on");
+    }
+  });
+}
+function createIframeController() {
+  const iframeController = document.createElement("div");
+  const container = document.querySelector(".content");
+  container.append(iframeController);
+  iframeController.classList.add("iframe_controller");
+  iframeController.innerHTML = `<button class="iframe_question">문제 사이즈</button><button class="iframe_code">코드창 사이즈</button><button class="iframe_hide_code">코드창 숨기기</button>`;
+  createIframeControllerEvent();
+}
 function createInputText() {
   const input_selector_wrapper = document
     .querySelector(".content")
@@ -56,12 +82,21 @@ function readOutput() {
   return output_list;
 }
 const IFRAMECSS = `body{margin:0px;height:100vh;}
-.table_row{     padding-left: 0.5rem;   background: #1e1e1e;color:#fff;overflow:scroll;display:flex;height:19vh;position:relative;flex-flow: row wrap;}
+.table_row {
+  padding-left: 0.5rem;   background: #1e1e1e;color:#fff;overflow:scroll;display:flex;height:19vh;position:relative;flex-flow: row wrap;
+  padding-top: 0.5rem;
+  box-sizing: border-box;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.table_row::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
+}
 .table_row__input, .table_row__output{width:50%;}
 .token.operator{background:none;}
 .table_row, .code_output_wrapper{font-size:0.7rem;}
 .code_output_wrapper{width:100%;}
-.run_code {  position: absolute;  bottom:20%;;  right: 0;  height:min-content;padding: 10px 15px;border: 0;color: #fff;background-color: #428bca;font-size:1rem;}
+.run_code {  position: absolute;  bottom:20%;;  right: 0;  height:min-content;padding: 10px 15px;border: 0;color: #fff;background-color: #428bca;font-size:0.7rem;}
 [class*="run_wrapper"] {  border-bottom: 1px solid grey; display: flex;  gap: 1rem;}
 [class*="answer_result"], [class*="code_evaluation"] {width:50%; word-break:break-all;  }
 [class*="run_wrapper"].correct {color: green;}
@@ -188,6 +223,7 @@ function createIframe(text) {
 }
 
 function init() {
+  createIframeController();
   createInputText();
   const input_selector = document.querySelector(".input_selector");
   input_selector.addEventListener("click", (target) => {
