@@ -15,7 +15,7 @@
   transition: 1s all;
   height: calc(100vh - 289px);
   position: fixed;
-  top: 200px;
+  top: 280px;
   left: 50%;
   max-width: 570px;
   width: 100%;
@@ -31,8 +31,8 @@
   transform: translate(100%);
   z-index: 1;
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 50px;
+  left: 15px;
   background: rgba(0, 0, 0, 0.5);
   width: 100%;
   padding-top: 2rem;
@@ -49,7 +49,7 @@
 .iframe_controller {
   position: absolute;
   height: 42px;
-  top: 10px;
+  top: 150px;
   right: 30px;
   display: flex;
   gap: 10px;
@@ -57,9 +57,9 @@
 .iframe_controller button {
   background: none;
   border: none;
+  padding: 10px 15px;
 }
 .iframe_controller .on {
   color: #fff;
   background-color: #428bca;
-  padding: 10px 15px;
 }

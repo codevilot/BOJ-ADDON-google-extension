@@ -143,7 +143,7 @@ function createIframeEvent(sample_example) {
         }
 
         require = function(fs){return {readFileSync : function(){ return inputValue}}};
-        const value = document.querySelector("textarea").value;
+        const value = document.querySelector(".view-lines").innerText.replace(/\xA0/g,' ');
         const fn = new Function(value);
         fn();
       }
