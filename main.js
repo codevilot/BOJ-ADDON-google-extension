@@ -55,13 +55,14 @@ function readOutput() {
     .forEach((element) => output_list.push(element.innerText));
   return output_list;
 }
-const IFRAMECSS = `body{margin:0px;}
-.table_row{display:flex;margin-top:45px;}
+const IFRAMECSS = `body{margin:0px;height:100vh;}
+.table_row{     padding-left: 0.5rem;   background: #1e1e1e;color:#fff;overflow:scroll;display:flex;height:19vh;position:relative;flex-flow: row wrap;}
 .table_row__input, .table_row__output{width:50%;}
 .token.operator{background:none;}
 .table_row, .code_output_wrapper{font-size:0.7rem;}
-.run_code {float: right;padding: 10px 15px;border: 0;color: #fff;background-color: #428bca;}
-[class*="run_wrapper"] {  border-bottom: 1px solid black; display: flex;  gap: 1rem;}
+.code_output_wrapper{width:100%;}
+.run_code {  position: absolute;  bottom:20%;;  right: 0;  height:min-content;padding: 10px 15px;border: 0;color: #fff;background-color: #428bca;font-size:1rem;}
+[class*="run_wrapper"] {  border-bottom: 1px solid grey; display: flex;  gap: 1rem;}
 [class*="answer_result"], [class*="code_evaluation"] {width:50%; word-break:break-all;  }
 [class*="run_wrapper"].correct {color: green;}
 [class*="run_wrapper"].wrong {color: red;}`;
@@ -162,13 +163,13 @@ href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/
 function createBodyText(css) {
   return `<body><style>${css}</style>
 
-  <div id="container" style="height: 400px; border: 1px solid black"></div>
-<button class="run_code">실행(ALT+ENTER)</button>
-<div class="table_row">
+  <div id="container" style="height: 80vh; border: 1px solid black"></div>
+  <button class="run_code">실행(ALT+ENTER)</button>
+  <div class="table_row">
 <div class="table_row__input">입력값</div>
 <div class="table_row__output">정답</div>
-</div>  
 <div class="code_output_wrapper"></div>
+</div>  
 </body>`;
 }
 function createIframeHTML(head, body, event) {
