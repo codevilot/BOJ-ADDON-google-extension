@@ -9,12 +9,17 @@ const sample_dictionary = [
 ];
 const sample_object = {
   sn0: ``,
-  sn1: `const input = require('fs').readFileSync('/dev/stdin').toString().trim();`,
-  sn2: `const input = require('fs').readFileSync('/dev/stdin').toString().trim().split(' ');`,
-  sn3: `const input = require('fs').readFileSync('/dev/stdin').toString().trim().split('\\n');`,
-  sn4: `const [n, ...arr] = require('fs').readFileSync('/dev/stdin').toString().trim().split(/\\s/);`,
-  sn5: `const [n, ...arr] = require('fs').readFileSync('/dev/stdin').toString().trim().split('\\n');`,
-  sn6: `const input = require('fs').readFileSync('/dev/stdin').toString().trim().split(/\\s/);
+  sn1: `const input = require('fs').readFileSync('/dev/stdin').toString().trim();
+  `,
+  sn2: `const input = require('fs').readFileSync('/dev/stdin').toString().trim().split(' ');
+  `,
+  sn3: `const input = require('fs').readFileSync('/dev/stdin').toString().trim().split("\\\\n");
+  `,
+  sn4: `const [n, ...arr] = require('fs').readFileSync('/dev/stdin').toString().trim().split(/\\\\s/);
+  `,
+  sn5: `const [n, ...arr] = require('fs').readFileSync('/dev/stdin').toString().trim().split('\\\\n');
+  `,
+  sn6: `const input = require('fs').readFileSync('/dev/stdin').toString().trim().split(/\\\\s/);
 const n = input[0];
 const n_arr = input.slice(1, n+1);
 const [m, ...m_arr] = input.slice(n+1);`,
@@ -53,23 +58,34 @@ function readOutput() {
 const IFRAMECSS = `body{margin:0px;}
 .table_row{display:flex;margin-top:45px;}
 .table_row__input, .table_row__output{width:50%;}
-code-input textarea, pre, code[class*="language-"], pre[class*="language-"] {width:100vw!important;
-  word-break: break-word;
-  white-space: pre-wrap;}
-  .token.operator{background:none;}
-code-input{margin:0px;height: 500px;width: 100vw;padding: 0px;}
-code-input textarea, pre{box-sizing: border-box;}
+.token.operator{background:none;}
+.table_row, .code_output_wrapper{font-size:0.7rem;}
 .run_code {float: right;padding: 10px 15px;border: 0;color: #fff;background-color: #428bca;}
 [class*="run_wrapper"] {  border-bottom: 1px solid black; display: flex;  gap: 1rem;}
 [class*="answer_result"], [class*="code_evaluation"] {width:50%; word-break:break-all;  }
 [class*="run_wrapper"].correct {color: green;}
 [class*="run_wrapper"].wrong {color: red;}`;
-const IframeScript = `codeInput.registerTemplate( "code-input",  codeInput.templates.prism(Prism, [new codeInput.plugins.Indent()]));`;
-function createIframeEvent() {
+const IframeScript = ``;
+function createIframeEvent(sample_example) {
   const input_list = JSON.stringify(readInput());
   const output_list = JSON.stringify(readOutput());
   return `
     <script>
+      require.config({
+        paths: {
+          vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.26.1/min/vs",
+        },
+      });
+      require(["vs/editor/editor.main"], () => {
+        monaco.editor.create(document.getElementById("container"), {
+          value: \`${sample_example}\`,
+          language: "javascript",
+          theme: "vs-dark",
+          minimap: { enabled: false },
+          automaticLayout: true,
+        });
+      });
+
       const run =function(inputValue, index){
         console.log = function(){
           const body = document.querySelector(".code_output_wrapper");
@@ -88,9 +104,8 @@ function createIframeEvent() {
         }
 
         require = function(fs){
-          return {readFileSync : function(state){
-          return inputValue}}};
-        const value = document.querySelector("textarea").value;
+          return {readFileSync : function(){ return inputValue}}};
+        const value = document.querySelector(".view-lines").innerText;
         const fn = new Function(value)
         fn()  
       }
@@ -123,7 +138,7 @@ function createIframeEvent() {
 
       );
       window.addEventListener("keydown", ()=>{
-          if (event.ctrlKey && event.keyCode === 13) {
+          if (event.altKey && event.keyCode === 13) {
             createAllResult()
           }
         })
@@ -133,23 +148,22 @@ function createIframeEvent() {
 function createHeadText(script) {
   return `<head>
 <meta charset="UTF-8" />
-<link id="import-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-core.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/WebCoder49/code-input@1.1/code-input.css"/>
-<script src="https://cdn.jsdelivr.net/gh/WebCoder49/code-input@1.1/code-input.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/WebCoder49/code-input@1.1/plugins/indent.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/WebCoder49/code-input@1.1/plugins/autodetect.js"></script>
+<link
+rel="stylesheet"
+data-name="vs/editor/editor.main"
+href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css"
+/>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.26.1/min/vs/loader.min.js"></script>
 <script>${script}</script> 
 </head>`;
 }
 
-function createBodyText(sample, css) {
+function createBodyText(css) {
   return `<body><style>${css}</style>
-<code-input lang="JavaScript" value=${sample}></code-input>
-<script>codeInput.registerTemplate("code-input",codeInput.templates.prism(Prism));</script>
 
-<button class="run_code">실행(CTRL+ENTER)</button>
+  <div id="container" style="height: 400px; border: 1px solid black"></div>
+<button class="run_code">실행(ALT+ENTER)</button>
 <div class="table_row">
 <div class="table_row__input">입력값</div>
 <div class="table_row__output">정답</div>
@@ -176,13 +190,10 @@ function init() {
   createInputText();
   const input_selector = document.querySelector(".input_selector");
   input_selector.addEventListener("click", (target) => {
+    if (!target.target.classList[0].includes("sn")) return;
     const sample_object_key = target.target.classList;
-    const iframeBodyText = createBodyText(
-      `"${sample_object[sample_object_key]}"`,
-      IFRAMECSS
-    );
-
-    const iframeEvent = createIframeEvent();
+    const iframeBodyText = createBodyText(IFRAMECSS);
+    const iframeEvent = createIframeEvent(sample_object[sample_object_key]);
     const iframeHeadText = createHeadText(IframeScript);
     const iframeHTML = createIframeHTML(
       iframeHeadText,
