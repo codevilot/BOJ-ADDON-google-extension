@@ -40,6 +40,9 @@ function createIframeControllerEvent() {
       eventTarget.classList.toggle("hide_code");
       target.target.classList.toggle("on");
     }
+    if (target.target.classList[0] === "example_toggle_button") {
+      toggle_example();
+    }
   });
 }
 function createIframeController() {
@@ -47,7 +50,7 @@ function createIframeController() {
   const container = document.querySelector(".content");
   container.append(iframeController);
   iframeController.classList.add("iframe_controller");
-  iframeController.innerHTML = `<button class="iframe_question">문제 사이즈</button><button class="iframe_code">코드창 사이즈</button><button class="iframe_hide_code">코드창 숨기기</button>`;
+  iframeController.innerHTML = `<button class="iframe_question">문제 사이즈</button><button class="iframe_code">코드창 사이즈</button><button class="iframe_hide_code">코드창 숨기기</button><button class="example_toggle_button">입력 예시창</button>`;
   createIframeControllerEvent();
 }
 function createInputText() {
@@ -66,6 +69,9 @@ function createInputText() {
 }
 function close_example() {
   document.querySelector(".input_selector").classList.add("displayNone");
+}
+function toggle_example() {
+  document.querySelector(".input_selector").classList.toggle("displayNone");
 }
 function readInput() {
   const input_list = [];
@@ -227,13 +233,20 @@ function createIframe(text) {
 function init() {
   createIframeController();
   createInputText();
+  const address = document.location.href.split("/");
+  const checkStorage = localStorage.getItem(address[address.length - 1]);
+
   const input_selector = document.querySelector(".input_selector");
+  const iframeHeadText = createHeadText(IframeScript);
+  const iframeBodyText = createBodyText(IFRAMECSS);
   input_selector.addEventListener("click", (target) => {
     if (!target.target.classList[0].includes("sn")) return;
+    const run_div = document.querySelectorAll(".run_div");
+    if (run_div !== null) {
+      run_div.forEach((element) => element.remove());
+    }
     const sample_object_key = target.target.classList;
-    const iframeBodyText = createBodyText(IFRAMECSS);
     const iframeEvent = createIframeEvent(sample_object[sample_object_key]);
-    const iframeHeadText = createHeadText(IframeScript);
     const iframeHTML = createIframeHTML(
       iframeHeadText,
       iframeBodyText,
@@ -242,5 +255,26 @@ function init() {
     createIframe(iframeHTML);
     close_example();
   });
+  if (checkStorage !== null) {
+    const iframeEvent = createIframeEvent(checkStorage.replace(/\\/g, "\\"));
+    console.log(checkStorage);
+    const iframeHTML = createIframeHTML(
+      iframeHeadText,
+      iframeBodyText,
+      iframeEvent
+    );
+    createIframe(iframeHTML);
+    close_example();
+  }
+
+  window.onbeforeunload = () => {
+    const address = document.location.href.split("/");
+    const codeLine = document
+      .querySelector(".run_div")
+      .contentWindow.document.querySelector(".view-lines").innerText;
+    if ((codeLine !== null) | (codeLine.trim() !== "")) {
+      localStorage.setItem(address[address.length - 1], codeLine);
+    }
+  };
 }
 init();
