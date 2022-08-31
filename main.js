@@ -256,7 +256,7 @@ function init() {
     close_example();
   });
   if (checkStorage !== null) {
-    const iframeEvent = createIframeEvent(checkStorage.replace(/\\/g, "\\"));
+    const iframeEvent = createIframeEvent(checkStorage.replace(/\\/g, "\\\\"));
     console.log(checkStorage);
     const iframeHTML = createIframeHTML(
       iframeHeadText,
