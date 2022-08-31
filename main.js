@@ -128,7 +128,7 @@ function createIframeEvent(sample_example) {
         });
       });
 
-      const run =function(inputValue, index){
+      const run =function(inputValue, index, isBlank){
         console.log = function(){
           const body = document.querySelector(".code_output_wrapper");
           if(document.querySelectorAll(".run_wrapper"+index)){
@@ -147,15 +147,15 @@ function createIframeEvent(sample_example) {
           const code_evaluation = document.querySelector(".code_evaluation"+index);
           code_evaluation.append(txt);
         }
-
+        if(isBlank){ console.log("출력할 값이 없습니다.")}
         require = function(fs){return {readFileSync : function(){ return inputValue}}};
         const value = document.querySelector(".view-lines").innerText.replace(/\xA0/g,' ');
         const fn = new Function(value);
         fn();
       }
 
-      const displayAnswer= function(outputValue,index){
-        
+      const displayAnswer= function(outputValue,index){   
+        if(!document.querySelector(".code_evaluation"+index)){ run(false, index, true)}
         const code_evaluation = document.querySelector(".code_evaluation"+index);
         const code_result = document.querySelector(".run_wrapper"+index);
         const answer_div =  document.createElement("div");
@@ -171,7 +171,7 @@ function createIframeEvent(sample_example) {
       const createAllResult= function(){
         document.querySelector('.code_output_wrapper').innerHTML="";
         ${input_list}.forEach((inputValue, index) =>
-        run(inputValue, index));
+        run(inputValue, index, false));
         ${output_list}.forEach((outputValue, index)=>
         displayAnswer(outputValue,index));
       }
