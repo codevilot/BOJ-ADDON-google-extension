@@ -113,24 +113,25 @@ function createIframeEvent(sample_example) {
   const output_list = JSON.stringify(readOutput());
   return `
     <script>
+      let editor;
       require.config({
         paths: {
           vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.26.1/min/vs",
         },
       });
       require(["vs/editor/editor.main"], () => {
-        monaco.editor.create(document.getElementById("container"), {
+        editor= monaco.editor.create(document.getElementById("container"), {
           value: \`${sample_example}\`,
           language: "javascript",
           theme: "vs-dark",
           minimap: { enabled: false },
           automaticLayout: true,
         });
-      });
 
+      });
       const run =function(inputValue, index){
+        const body = document.querySelector(".code_output_wrapper");
         console.log = function(){
-          const body = document.querySelector(".code_output_wrapper");
           if(document.querySelectorAll(".run_wrapper"+index)){
             const run_wrapper =document.createElement("div");
             run_wrapper.classList.add("run_wrapper"+index);            
@@ -149,7 +150,7 @@ function createIframeEvent(sample_example) {
         }
 
         require = function(fs){return {readFileSync : function(){ return inputValue}}};
-        const value = document.querySelector(".view-lines").innerText.replace(/\xA0/g,' ');
+        const value = editor.getValue() 
         const fn = new Function(value);
         fn();
       }
@@ -257,7 +258,6 @@ function init() {
   });
   if (checkStorage !== null) {
     const iframeEvent = createIframeEvent(checkStorage.replace(/\\/g, "\\\\"));
-    console.log(checkStorage);
     const iframeHTML = createIframeHTML(
       iframeHeadText,
       iframeBodyText,

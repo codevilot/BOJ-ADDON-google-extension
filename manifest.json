@@ -8,7 +8,11 @@
     {
       "css": ["styles.css"],
       "js": ["main.js"],
-      "matches": ["https://www.acmicpc.net/problem/*"]
+      "matches": ["https://www.acmicpc.net/problem/*"],
+      "exclude_matches": [
+        "https://www.acmicpc.net/problem/status/*",
+        "https://www.acmicpc.net/problem/history/*"
+      ]
     }
   ],
   "type": "module"
