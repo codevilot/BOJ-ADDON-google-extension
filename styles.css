@@ -45,14 +45,25 @@
 .displayNone {
   display: none;
 }
-
+/* .run_div {
+  z-index: 1;
+  transition: 1s all;
+  height: calc(100vh - 289px);
+  position: fixed;
+  top: 280px;
+  left: 50%;
+  max-width: 570px;
+  width: 100%;
+} */
 .iframe_controller {
-  position: absolute;
+  position: fixed;
   height: 42px;
-  top: 150px;
-  right: 30px;
+  top: 230px;
+  left: 50%;
   display: flex;
   gap: 10px;
+  background-color: white;
+  z-index: 1;
 }
 .iframe_controller button {
   background: none;

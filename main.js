@@ -1,28 +1,23 @@
 const sample_dictionary = [
-  "빈값",
-  "하나의 값을 입력받을 때",
-  "공백으로 구분된 한 줄의 값들을 입력받을 때",
-  "여러 줄의 값들을 입력받을 때",
-  "첫 번째 줄에 자연수 n을 입력받고, 그 다음줄에 공백으로 구분된 n개의 값들을 입력받을 때",
-  "첫 번째 줄에 자연수 n을 입력받고, 그 다음줄부터 n개의 줄에 걸쳐 한 줄에 하나의 값을 입력받을 때",
-  "하나의 값 또는 공백으로 구분된 여러 값들을 여러 줄에 걸쳐 뒤죽박죽 섞여서 입력받을 때",
+  "입력 값\n없음",
+  "입력 값 1개\n\n예시:\ninput",
+  "첫째 줄에 빈칸을 두고 값 정렬\n\n예시:\narr[0], arr[1], ...arr[n]",
+  "각 줄에 값 정렬\n\n예시:\narr[0]\narr[1]\n...\narr[n]",
+  "첫째 줄에 N, 두 번째 줄에 빈칸을 두고 값 정렬\n\n예시:\nn\narr[0], arr[1], ...arr[n]",
+  "첫째 줄에 N, 두 번째줄 부터 각 줄에 값 정렬\n\n예시:\nn\narr[0]\narr[1]\n...\narr[n]",
 ];
 const sample_object = {
   sn0: ``,
   sn1: `const input = require('fs').readFileSync('/dev/stdin').toString().trim();
   `,
-  sn2: `const input = require('fs').readFileSync('/dev/stdin').toString().trim().split(' ');
+  sn2: `const arr = require('fs').readFileSync('/dev/stdin').toString().trim().split(' ');
   `,
-  sn3: `const input = require('fs').readFileSync('/dev/stdin').toString().trim().split("\\\\n");
+  sn3: `const arr = require('fs').readFileSync('/dev/stdin').toString().trim().split("\\\\n");
   `,
   sn4: `const [n, ...arr] = require('fs').readFileSync('/dev/stdin').toString().trim().split(/\\\\s/);
   `,
   sn5: `const [n, ...arr] = require('fs').readFileSync('/dev/stdin').toString().trim().split('\\\\n');
   `,
-  sn6: `const input = require('fs').readFileSync('/dev/stdin').toString().trim().split(/\\\\s/);
-const n = input[0];
-const n_arr = input.slice(1, n+1);
-const [m, ...m_arr] = input.slice(n+1);`,
 };
 function createIframeControllerEvent() {
   const iframeController = document.querySelector(".iframe_controller");
@@ -54,9 +49,7 @@ function createIframeController() {
   createIframeControllerEvent();
 }
 function createInputText() {
-  const input_selector_wrapper = document
-    .querySelector(".content")
-    .querySelector(".row");
+  const input_selector_wrapper = document.querySelector(".content").querySelector(".row");
   const input_selector = document.createElement("div");
   input_selector_wrapper.append(input_selector);
   input_selector.classList.add("input_selector");
@@ -113,7 +106,7 @@ function createIframeEvent(sample_example) {
   const output_list = JSON.stringify(readOutput());
   return `
     <script>
-      let editor;
+      var editor;
       require.config({
         paths: {
           vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.26.1/min/vs",
@@ -152,7 +145,7 @@ function createIframeEvent(sample_example) {
         require = function(fs){return {readFileSync : function(){ return inputValue}}};
         const value = editor.getValue() 
         const fn = new Function(value);
-        fn();
+        fn(); 
       }
 
       const displayAnswer= function(outputValue,index){
@@ -222,9 +215,7 @@ function createIframeHTML(head, body, event) {
 
 function createIframe(text) {
   const iframe = document.createElement("iframe");
-  const iframe_wrapper = document
-    .querySelector(".content")
-    .querySelector(".row");
+  const iframe_wrapper = document.querySelector(".content").querySelector(".row");
   iframe_wrapper.append(iframe);
   iframe.classList.add("run_div");
   iframe.srcdoc = `${text}`;
@@ -236,7 +227,6 @@ function init() {
   createInputText();
   const address = document.location.href.split("/");
   const checkStorage = localStorage.getItem(address[address.length - 1]);
-
   const input_selector = document.querySelector(".input_selector");
   const iframeHeadText = createHeadText(IframeScript);
   const iframeBodyText = createBodyText(IFRAMECSS);
@@ -248,30 +238,20 @@ function init() {
     }
     const sample_object_key = target.target.classList;
     const iframeEvent = createIframeEvent(sample_object[sample_object_key]);
-    const iframeHTML = createIframeHTML(
-      iframeHeadText,
-      iframeBodyText,
-      iframeEvent
-    );
+    const iframeHTML = createIframeHTML(iframeHeadText, iframeBodyText, iframeEvent);
     createIframe(iframeHTML);
     close_example();
   });
   if (checkStorage !== null) {
     const iframeEvent = createIframeEvent(checkStorage.replace(/\\/g, "\\\\"));
-    const iframeHTML = createIframeHTML(
-      iframeHeadText,
-      iframeBodyText,
-      iframeEvent
-    );
+    const iframeHTML = createIframeHTML(iframeHeadText, iframeBodyText, iframeEvent);
     createIframe(iframeHTML);
     close_example();
   }
 
   window.onbeforeunload = () => {
     const address = document.location.href.split("/");
-    const codeLine = document
-      .querySelector(".run_div")
-      .contentWindow.document.querySelector(".view-lines").innerText;
+    const codeLine = g;
     if ((codeLine !== null) | (codeLine.trim() !== "")) {
       localStorage.setItem(address[address.length - 1], codeLine);
     }
