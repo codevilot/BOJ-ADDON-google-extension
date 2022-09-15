@@ -1,10 +1,10 @@
 const sample_dictionary = [
-  "입력 값\n없음",
-  "입력 값 1개\n\n예시:\ninput",
-  "첫째 줄에 빈칸을 두고 값 정렬\n\n예시:\narr[0], arr[1], ...arr[n]",
+  "\n\n입력값 없음",
+  "input\n\n입력 값 1개",
+  "arr[0], arr[1], ...arr[n]\n\n빈칸을 두고 값 정렬",
   "각 줄에 값 정렬\n\n예시:\narr[0]\narr[1]\n...\narr[n]",
-  "첫째 줄에 N, 두 번째 줄에 빈칸을 두고 값 정렬\n\n예시:\nn\narr[0], arr[1], ...arr[n]",
-  "첫째 줄에 N, 두 번째줄 부터 각 줄에 값 정렬\n\n예시:\nn\narr[0]\narr[1]\n...\narr[n]",
+  "N\narr[0], arr[1], ...arr[n]\n\n첫째 줄에 N, 두 번째 줄에 값 정렬\n\n",
+  "N\narr[0]\narr[1]\n...\narr[n]\n\n첫째 줄에 N, 두 번째줄부터 값 정렬\n\n",
 ];
 const sample_object = {
   sn0: ``,
@@ -49,7 +49,9 @@ function createIframeController() {
   createIframeControllerEvent();
 }
 function createInputText() {
-  const input_selector_wrapper = document.querySelector(".content").querySelector(".row");
+  const input_selector_wrapper = document
+    .querySelector(".content")
+    .querySelector(".row");
   const input_selector = document.createElement("div");
   input_selector_wrapper.append(input_selector);
   input_selector.classList.add("input_selector");
@@ -215,7 +217,9 @@ function createIframeHTML(head, body, event) {
 
 function createIframe(text) {
   const iframe = document.createElement("iframe");
-  const iframe_wrapper = document.querySelector(".content").querySelector(".row");
+  const iframe_wrapper = document
+    .querySelector(".content")
+    .querySelector(".row");
   iframe_wrapper.append(iframe);
   iframe.classList.add("run_div");
   iframe.srcdoc = `${text}`;
@@ -238,13 +242,21 @@ function init() {
     }
     const sample_object_key = target.target.classList;
     const iframeEvent = createIframeEvent(sample_object[sample_object_key]);
-    const iframeHTML = createIframeHTML(iframeHeadText, iframeBodyText, iframeEvent);
+    const iframeHTML = createIframeHTML(
+      iframeHeadText,
+      iframeBodyText,
+      iframeEvent
+    );
     createIframe(iframeHTML);
     close_example();
   });
   if (checkStorage !== null) {
     const iframeEvent = createIframeEvent(checkStorage.replace(/\\/g, "\\\\"));
-    const iframeHTML = createIframeHTML(iframeHeadText, iframeBodyText, iframeEvent);
+    const iframeHTML = createIframeHTML(
+      iframeHeadText,
+      iframeBodyText,
+      iframeEvent
+    );
     createIframe(iframeHTML);
     close_example();
   }
