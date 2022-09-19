@@ -6,6 +6,7 @@ const sample_dictionary = [
   "N\narr[0], arr[1], ...arr[n]\n\n첫째 줄에 N, 두 번째 줄에 값 정렬\n\n",
   "N\narr[0]\narr[1]\n...\narr[n]\n\n첫째 줄에 N, 두 번째줄부터 값 정렬\n\n",
 ];
+
 const sample_object = {
   sn0: ``,
   sn1: `const input = require('fs').readFileSync('/dev/stdin').toString().trim();
@@ -225,7 +226,6 @@ function createIframe(text) {
   iframe.srcdoc = `${text}`;
   iframe.frameBorder = "0";
 }
-
 function init() {
   createIframeController();
   createInputText();
@@ -251,7 +251,9 @@ function init() {
     close_example();
   });
   if (checkStorage !== null) {
-    const iframeEvent = createIframeEvent(checkStorage.replace(/\\/g, "\\\\"));
+    const iframeEvent = createIframeEvent(
+      checkStorage.replace(/\\/g, "\\\\").replace(/·/g, " ")
+    );
     const iframeHTML = createIframeHTML(
       iframeHeadText,
       iframeBodyText,
@@ -263,7 +265,9 @@ function init() {
 
   window.onbeforeunload = () => {
     const address = document.location.href.split("/");
-    const codeLine = g;
+    const codeLine = document
+      .querySelector(".run_div")
+      .contentWindow.document.querySelector(".view-lines").innerText;
     if ((codeLine !== null) | (codeLine.trim() !== "")) {
       localStorage.setItem(address[address.length - 1], codeLine);
     }
