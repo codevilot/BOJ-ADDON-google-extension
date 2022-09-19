@@ -226,6 +226,7 @@ function createIframe(text) {
   iframe.srcdoc = `${text}`;
   iframe.frameBorder = "0";
 }
+
 function init() {
   createIframeController();
   createInputText();
