@@ -86,3 +86,11 @@
   color: #fff;
   background-color: #428bca;
 }
+.btn-add-sample {
+  border: 0;
+  color: #fff;
+  background-color: #428bca;
+  font-size: 2rem;
+  margin-left: 15px;
+  padding: 1rem;
+}

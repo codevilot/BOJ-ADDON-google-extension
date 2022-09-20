@@ -73,14 +73,19 @@ function readInput() {
   const input_list = [];
   document
     .querySelectorAll(`[id*="sample-input-"]`)
-    .forEach((element) => input_list.push(`${element.innerText}`));
+
+    .forEach((element) =>
+      input_list.push(element.innerText ? element.innerText : element.value)
+    );
   return input_list;
 }
 function readOutput() {
   const output_list = [];
   document
     .querySelectorAll(`[id*="sample-output-"]`)
-    .forEach((element) => output_list.push(element.innerText));
+    .forEach((element) =>
+      output_list.push(element.innerText ? element.innerText : element.value)
+    );
   return output_list;
 }
 const IFRAMECSS = `body{margin:0px;height:100vh;}
@@ -103,12 +108,15 @@ const IFRAMECSS = `body{margin:0px;height:100vh;}
 [class*="answer_result"], [class*="code_evaluation"] {width:50%; word-break:break-all;  }
 [class*="run_wrapper"].correct {color: green;}
 [class*="run_wrapper"].wrong {color: red;}`;
-const IframeScript = ``;
+const IframeScript = `
+`;
 function createIframeEvent(sample_example) {
   const input_list = JSON.stringify(readInput());
   const output_list = JSON.stringify(readOutput());
+  const PATH = window.location.pathname;
   return `
     <script>
+      const PATH = "${PATH}"
       var editor;
       require.config({
         paths: {
@@ -142,7 +150,9 @@ function createIframeEvent(sample_example) {
           acc+cur+" ", ""))
 
           const code_evaluation = document.querySelector(".code_evaluation"+index);
-          code_evaluation.append(txt);
+          const text_container = document.createElement('div')
+          text_container.append(txt)
+          code_evaluation.append(text_container);
         }
 
         require = function(fs){return {readFileSync : function(){ return inputValue}}};
@@ -183,6 +193,9 @@ function createIframeEvent(sample_example) {
             createAllResult()
           }
         })
+      window.addEventListener('beforeunload', ()=>{
+        localStorage.setItem(PATH,editor.getValue())
+      })
     </script>
     `;
 }
@@ -226,12 +239,73 @@ function createIframe(text) {
   iframe.srcdoc = `${text}`;
   iframe.frameBorder = "0";
 }
+const hintPosition = document
+  .getElementById("problem_hint")
+  .closest(".col-md-12");
+function createSampleNode(sampleNumber) {
+  const sampleNode = document.createElement("div");
+  sampleNode.innerHTML = `
+  <div class="col-md-12">
+  <div class="row">
+    <div class="col-md-6">
+      <section id="sampleinput${sampleNumber}">
+        <div class="headline">
+          <h2>
+            예제 입력 ${sampleNumber}
+            <button
+              type="button"
+              class="btn btn-link copy-button"
+              style="padding: 0px"
+              data-clipboard-target="#sample-input-${sampleNumber}"
+            >
+              복사
+            </button>
+          </h2>
+        </div>
+        <textarea class="sampledata" id="sample-input-${sampleNumber}">입력을 입력해주세요</textarea>
+      </section>
+    </div>
+    <div class="col-md-6">
+      <section id="sampleoutput${sampleNumber}">
+        <div class="headline">
+          <h2>
+            예제 출력 ${sampleNumber}
+            <button
+              type="button"
+              class="btn btn-link copy-button"
+              style="padding: 0px"
+              data-clipboard-target="#sample-output-${sampleNumber}"
+            >
+              복사
+            </button>
+          </h2>
+        </div>
+        <textarea class="sampledata" id="sample-output-${sampleNumber}">출력을 입력해주세요</textarea>
+      </section>
+    </div>
+  </div>
+</div>
+  `;
+  hintPosition.before(sampleNode);
+  console.log();
+}
+// function
+function createSample() {
+  const sampleButton = document.createElement("button");
+  const hintPosition = document
+    .getElementById("problem_hint")
+    .closest(".col-md-12");
+  sampleButton.innerText = "예제 추가하기";
+  hintPosition.after(sampleButton);
+  sampleButton.classList.add("btn-add-sample");
+  // createSampleNode(6);
+}
 
 function init() {
   createIframeController();
   createInputText();
-  const address = document.location.href.split("/");
-  const checkStorage = localStorage.getItem(address[address.length - 1]);
+
+  const checkStorage = localStorage.getItem(window.location.pathname);
   const input_selector = document.querySelector(".input_selector");
   const iframeHeadText = createHeadText(IframeScript);
   const iframeBodyText = createBodyText(IFRAMECSS);
@@ -263,15 +337,6 @@ function init() {
     createIframe(iframeHTML);
     close_example();
   }
-
-  window.onbeforeunload = () => {
-    const address = document.location.href.split("/");
-    const codeLine = document
-      .querySelector(".run_div")
-      .contentWindow.document.querySelector(".view-lines").innerText;
-    if ((codeLine !== null) | (codeLine.trim() !== "")) {
-      localStorage.setItem(address[address.length - 1], codeLine);
-    }
-  };
+  createSample();
 }
 init();
