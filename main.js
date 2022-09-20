@@ -111,12 +111,12 @@ const IFRAMECSS = `body{margin:0px;height:100vh;}
 const IframeScript = `
 `;
 function createIframeEvent(sample_example) {
-  const input_list = JSON.stringify(readInput());
-  const output_list = JSON.stringify(readOutput());
   const PATH = window.location.pathname;
   return `
     <script>
       const PATH = "${PATH}"
+      var input_list
+      var output_list 
       var editor;
       require.config({
         paths: {
@@ -176,17 +176,19 @@ function createIframeEvent(sample_example) {
         }
       }
       const createAllResult= function(){
+        input_list = JSON.parse(localStorage.getItem('tempInput'))
+        output_list= JSON.parse(localStorage.getItem('tempOutput'))
+        console.log(typeof input_list)
         document.querySelector('.code_output_wrapper').innerHTML="";
-        ${input_list}.forEach((inputValue, index) =>
+        input_list.forEach((inputValue, index) =>
         run(inputValue, index));
-        ${output_list}.forEach((outputValue, index)=>
+        output_list.forEach((outputValue, index)=>
         displayAnswer(outputValue,index));
       }
       const run_code = document.querySelector(".run_code")
           run_code.addEventListener("click", () => {
             createAllResult()
           }
-
       );
       window.addEventListener("keydown", ()=>{
           if (event.altKey && event.keyCode === 13) {
@@ -290,15 +292,31 @@ function createSampleNode(sampleNumber) {
   console.log();
 }
 // function
+function insertSample() {
+  localStorage.setItem("tempInput", JSON.stringify(readInput()));
+  localStorage.setItem("tempOutput", JSON.stringify(readOutput()));
+}
+function getSampleNumber() {
+  return document.querySelectorAll(`[id*="sample-input-"]`).length;
+}
 function createSample() {
   const sampleButton = document.createElement("button");
+  const checkButton = document.createElement("button");
   const hintPosition = document
     .getElementById("problem_hint")
     .closest(".col-md-12");
   sampleButton.innerText = "예제 추가하기";
+  checkButton.innerText = "예제 적용하기";
   hintPosition.after(sampleButton);
+  hintPosition.after(checkButton);
   sampleButton.classList.add("btn-add-sample");
-  // createSampleNode(6);
+  checkButton.classList.add("btn-add-check");
+  sampleButton.addEventListener("click", () => {
+    createSampleNode(getSampleNumber());
+  });
+  checkButton.addEventListener("click", () => {
+    insertSample();
+  });
 }
 
 function init() {
@@ -338,5 +356,6 @@ function init() {
     close_example();
   }
   createSample();
+  insertSample();
 }
 init();
