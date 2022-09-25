@@ -1,252 +1,10 @@
-const sample_dictionary = [
-  "\n\n입력값 없음",
-  "input\n\n입력 값 1개",
-  "arr[0], arr[1], ...arr[n]\n\n빈칸을 두고 값 정렬",
-  "각 줄에 값 정렬\n\n예시:\narr[0]\narr[1]\n...\narr[n]",
-  "N\narr[0], arr[1], ...arr[n]\n\n첫째 줄에 N, 두 번째 줄에 값 정렬\n\n",
-  "N\narr[0]\narr[1]\n...\narr[n]\n\n첫째 줄에 N, 두 번째줄부터 값 정렬\n\n",
-];
-
-const sample_object = {
-  sn0: ``,
-  sn1: `const input = require('fs').readFileSync('/dev/stdin').toString().trim();
-  `,
-  sn2: `const arr = require('fs').readFileSync('/dev/stdin').toString().trim().split(' ');
-  `,
-  sn3: `const arr = require('fs').readFileSync('/dev/stdin').toString().trim().split("\\\\n");
-  `,
-  sn4: `const [n, ...arr] = require('fs').readFileSync('/dev/stdin').toString().trim().split(/\\\\s/);
-  `,
-  sn5: `const [n, ...arr] = require('fs').readFileSync('/dev/stdin').toString().trim().split('\\\\n');
-  `,
-};
-function createIframeControllerEvent() {
-  const iframeController = document.querySelector(".iframe_controller");
-  const eventTarget = document.querySelector(".content").querySelector(".row");
-  iframeController.addEventListener("click", (target) => {
-    if (target.target.classList[0] === "iframe_question") {
-      eventTarget.classList.toggle("question_full");
-      target.target.classList.toggle("on");
-    }
-    if (target.target.classList[0] === "iframe_code") {
-      eventTarget.classList.toggle("code");
-      target.target.classList.toggle("on");
-    }
-    if (target.target.classList[0] === "iframe_hide_code") {
-      eventTarget.classList.toggle("hide_code");
-      target.target.classList.toggle("on");
-    }
-    if (target.target.classList[0] === "example_toggle_button") {
-      toggle_example();
-    }
-  });
-}
-function createIframeController() {
-  const iframeController = document.createElement("div");
-  const container = document.querySelector(".content");
-  container.append(iframeController);
-  iframeController.classList.add("iframe_controller");
-  iframeController.innerHTML = `<button class="iframe_question">문제 사이즈</button><button class="iframe_code">코드창 사이즈</button><button class="iframe_hide_code">코드창 숨기기</button><button class="example_toggle_button">입력 예시창</button>`;
-  createIframeControllerEvent();
-}
-function createInputText() {
-  const input_selector_wrapper = document
-    .querySelector(".content")
-    .querySelector(".row");
-  const input_selector = document.createElement("div");
-  input_selector_wrapper.append(input_selector);
-  input_selector.classList.add("input_selector");
-  sample_dictionary.forEach((element, index) => {
-    const button_item = document.createElement("button");
-    button_item.classList.add(`sn${index}`);
-    button_item.innerHTML = element;
-    input_selector.append(button_item);
-  });
-}
-function close_example() {
-  document.querySelector(".input_selector").classList.add("displayNone");
-}
-function toggle_example() {
-  document.querySelector(".input_selector").classList.toggle("displayNone");
-}
-function readInput() {
-  const input_list = [];
-  document
-    .querySelectorAll(`[id*="sample-input-"]`)
-
-    .forEach((element) =>
-      input_list.push(element.innerText ? element.innerText : element.value)
-    );
-  return input_list;
-}
-function readOutput() {
-  const output_list = [];
-  document
-    .querySelectorAll(`[id*="sample-output-"]`)
-    .forEach((element) =>
-      output_list.push(element.innerText ? element.innerText : element.value)
-    );
-  return output_list;
-}
-const IFRAMECSS = `body{margin:0px;height:100vh;}
-.table_row {
-  padding-left: 0.5rem;   background: #1e1e1e;color:#fff;overflow:scroll;display:flex;height:19vh;position:relative;flex-flow: row wrap;
-  padding-top: 0.5rem;
-  box-sizing: border-box;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-.table_row::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera*/
-}
-.table_row__input, .table_row__output{width:50%;}
-.token.operator{background:none;}
-.table_row, .code_output_wrapper{font-size:0.7rem;}
-.code_output_wrapper{width:100%;}
-.run_code {  position: absolute;  bottom:20%;;  right: 0;  height:min-content;padding: 10px 15px;border: 0;color: #fff;background-color: #428bca;font-size:0.7rem;}
-[class*="run_wrapper"] {  border-bottom: 1px solid grey; display: flex;  gap: 1rem;}
-[class*="answer_result"], [class*="code_evaluation"] {width:50%; word-break:break-all;  }
-[class*="run_wrapper"].correct {color: green;}
-[class*="run_wrapper"].wrong {color: red;}`;
-const IframeScript = `
-`;
-function createIframeEvent(sample_example) {
-  const PATH = window.location.pathname;
-  return `
-    <script>
-      const PATH = "${PATH}"
-      var input_list
-      var output_list 
-      var editor;
-      require.config({
-        paths: {
-          vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.26.1/min/vs",
-        },
-      });
-      require(["vs/editor/editor.main"], () => {
-        editor= monaco.editor.create(document.getElementById("container"), {
-          value: \`${sample_example}\`,
-          language: "javascript",
-          theme: "vs-dark",
-          minimap: { enabled: false },
-          automaticLayout: true,
-        });
-
-      });
-      const run =function(inputValue, index){
-        const body = document.querySelector(".code_output_wrapper");
-        console.log = function(){
-          if(document.querySelectorAll(".run_wrapper"+index)){
-            const run_wrapper =document.createElement("div");
-            run_wrapper.classList.add("run_wrapper"+index);            
-            body.append(run_wrapper);
-            const code_evaluation = document.createElement("div");
-            run_wrapper.append(code_evaluation);
-            code_evaluation.classList.add("code_evaluation"+index);
-          }
-          const txt = document.createTextNode([...arguments].reduce((acc, cur)=>
-          cur instanceof Set ||cur instanceof Map ? acc+JSON.stringify([...cur]) :
-          cur instanceof Array || cur instanceof Object ===true ? acc+JSON.stringify(cur):
-          acc+cur+" ", ""))
-
-          const code_evaluation = document.querySelector(".code_evaluation"+index);
-          const text_container = document.createElement('div')
-          text_container.append(txt)
-          code_evaluation.append(text_container);
-        }
-
-        require = function(fs){return {readFileSync : function(){ return inputValue}}};
-        const value = editor.getValue() 
-        const fn = new Function(value);
-        fn(); 
-      }
-
-      const displayAnswer= function(outputValue,index){
-        
-        const code_evaluation = document.querySelector(".code_evaluation"+index);
-        const code_result = document.querySelector(".run_wrapper"+index);
-        const answer_div =  document.createElement("div");
-        code_result?.append(answer_div);
-        answer_div.classList.add("answer_result"+index);
-        answer_div.append(outputValue);
-        if (answer_div?.innerHTML.trim() === code_evaluation?.innerHTML.trim()) {
-          code_result.classList.add("correct");
-        } else {
-          code_result.classList.add("wrong");
-        }
-      }
-      const createAllResult= function(){
-        input_list = JSON.parse(localStorage.getItem('tempInput'))
-        output_list= JSON.parse(localStorage.getItem('tempOutput'))
-        console.log(typeof input_list)
-        document.querySelector('.code_output_wrapper').innerHTML="";
-        input_list.forEach((inputValue, index) =>
-        run(inputValue, index));
-        output_list.forEach((outputValue, index)=>
-        displayAnswer(outputValue,index));
-      }
-      const run_code = document.querySelector(".run_code")
-          run_code.addEventListener("click", () => {
-            createAllResult()
-          }
-      );
-      window.addEventListener("keydown", ()=>{
-          if (event.altKey && event.keyCode === 13) {
-            createAllResult()
-          }
-        })
-      window.addEventListener('beforeunload', ()=>{
-        localStorage.setItem(PATH,editor.getValue())
-      })
-    </script>
-    `;
-}
-function createHeadText(script) {
-  return `<head>
-<meta charset="UTF-8" />
-<link
-rel="stylesheet"
-data-name="vs/editor/editor.main"
-href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css"
-/>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.26.1/min/vs/loader.min.js"></script>
-<script>${script}</script> 
-</head>`;
-}
-
-function createBodyText(css) {
-  return `<body><style>${css}</style>
-
-  <div id="container" style="height: 80vh; border: 1px solid black"></div>
-  <button class="run_code">실행(ALT+ENTER)</button>
-  <div class="table_row">
-<div class="table_row__input">입력값</div>
-<div class="table_row__output">정답</div>
-<div class="code_output_wrapper"></div>
-</div>  
-</body>`;
-}
-function createIframeHTML(head, body, event) {
-  return `<html lang="en">${head} ${body}${event}</html>`;
-}
-
-function createIframe(text) {
-  const iframe = document.createElement("iframe");
-  const iframe_wrapper = document
-    .querySelector(".content")
-    .querySelector(".row");
-  iframe_wrapper.append(iframe);
-  iframe.classList.add("run_div");
-  iframe.srcdoc = `${text}`;
-  iframe.frameBorder = "0";
-}
-const hintPosition = document
-  .getElementById("problem_hint")
-  .closest(".col-md-12");
-function createSampleNode(sampleNumber) {
-  const sampleNode = document.createElement("div");
-  sampleNode.innerHTML = `
+(() => {
+  const hintPosition = document
+    .getElementById("problem_hint")
+    .closest(".col-md-12");
+  function createSampleNode(sampleNumber) {
+    const sampleNode = document.createElement("div");
+    sampleNode.innerHTML = `
   <div class="col-md-12">
   <div class="row">
     <div class="col-md-6">
@@ -288,74 +46,274 @@ function createSampleNode(sampleNumber) {
   </div>
 </div>
   `;
-  hintPosition.before(sampleNode);
-  console.log();
-}
-// function
-function insertSample() {
-  localStorage.setItem("tempInput", JSON.stringify(readInput()));
-  localStorage.setItem("tempOutput", JSON.stringify(readOutput()));
-}
-function getSampleNumber() {
-  return document.querySelectorAll(`[id*="sample-input-"]`).length;
-}
-function createSample() {
-  const sampleButton = document.createElement("button");
-  const checkButton = document.createElement("button");
-  const hintPosition = document
-    .getElementById("problem_hint")
-    .closest(".col-md-12");
-  sampleButton.innerText = "예제 추가하기";
-  checkButton.innerText = "예제 적용하기";
-  hintPosition.after(sampleButton);
-  hintPosition.after(checkButton);
-  sampleButton.classList.add("btn-add-sample");
-  checkButton.classList.add("btn-add-check");
-  sampleButton.addEventListener("click", () => {
-    createSampleNode(getSampleNumber());
-  });
-  checkButton.addEventListener("click", () => {
-    insertSample();
-  });
-}
-
-function init() {
-  createIframeController();
-  createInputText();
-
-  const checkStorage = localStorage.getItem(window.location.pathname);
-  const input_selector = document.querySelector(".input_selector");
-  const iframeHeadText = createHeadText(IframeScript);
-  const iframeBodyText = createBodyText(IFRAMECSS);
-  input_selector.addEventListener("click", (target) => {
-    if (!target.target.classList[0].includes("sn")) return;
-    const run_div = document.querySelectorAll(".run_div");
-    if (run_div !== null) {
-      run_div.forEach((element) => element.remove());
-    }
-    const sample_object_key = target.target.classList;
-    const iframeEvent = createIframeEvent(sample_object[sample_object_key]);
-    const iframeHTML = createIframeHTML(
-      iframeHeadText,
-      iframeBodyText,
-      iframeEvent
-    );
-    createIframe(iframeHTML);
-    close_example();
-  });
-  if (checkStorage !== null) {
-    const iframeEvent = createIframeEvent(
-      checkStorage.replace(/\\/g, "\\\\").replace(/·/g, " ")
-    );
-    const iframeHTML = createIframeHTML(
-      iframeHeadText,
-      iframeBodyText,
-      iframeEvent
-    );
-    createIframe(iframeHTML);
-    close_example();
+    hintPosition.before(sampleNode);
   }
+  function readInput() {
+    const input_list = [];
+    document
+      .querySelectorAll(`[id*="sample-input-"]`)
+
+      .forEach((element) =>
+        input_list.push(element.innerText ? element.innerText : element.value)
+      );
+    return input_list;
+  }
+  function readOutput() {
+    const output_list = [];
+    document
+      .querySelectorAll(`[id*="sample-output-"]`)
+      .forEach((element) =>
+        output_list.push(element.innerText ? element.innerText : element.value)
+      );
+    return output_list;
+  }
+  function insertSample() {
+    localStorage.setItem("tempInput", JSON.stringify(readInput()));
+    localStorage.setItem("tempOutput", JSON.stringify(readOutput()));
+  }
+  function getSampleNumber() {
+    return document.querySelectorAll(`[id*="sample-input-"]`).length;
+  }
+  function createSample() {
+    const sampleButton = document.createElement("button");
+    const checkButton = document.createElement("button");
+    const hintPosition = document
+      .getElementById("problem_hint")
+      .closest(".col-md-12");
+    sampleButton.innerText = "예제 추가하기";
+    checkButton.innerText = "예제 적용하기";
+    hintPosition.after(sampleButton);
+    hintPosition.after(checkButton);
+    sampleButton.classList.add("btn-add-sample");
+    checkButton.classList.add("btn-add-check");
+    sampleButton.addEventListener("click", () => {
+      createSampleNode(getSampleNumber());
+    });
+    checkButton.addEventListener("click", () => {
+      insertSample();
+    });
+  }
+  localStorage.setItem("path", window.location.pathname);
   createSample();
   insertSample();
-}
-init();
+})();
+
+(() => {
+  {
+    const iframe = document.createElement("iframe");
+    const iframe_wrapper = document.querySelector(".content .row");
+    iframe.frameBorder = "0";
+    iframe.classList.add("boj-addon");
+    iframe_wrapper.append(iframe);
+    iframe.srcdoc = `
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <link
+          rel="stylesheet"
+          data-name="vs/editor/editor.main"
+          href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css"
+        />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.26.1/min/vs/loader.min.js"></script>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>BOJ addon</title>
+      </head>
+      <body>
+      <script>
+      
+      </script>
+        <style>
+          body {
+            margin: 0px;
+            height: 100vh;
+            padding-left:1rem;
+          }
+          .hidden {
+            display: none;
+          }
+          .correct {
+            color: green;
+          }
+          .wrong {
+            color: red;
+          }
+          .boj-addon-menu {
+            background: #1e1e1e;
+            color: white;
+            padding: 0.5rem 0.3rem;
+          }
+          .example-hint {
+            background: #1e1e1e;
+            position: absolute;
+            z-index: 1;
+          }
+          .example-hint button {
+            display: block;
+            white-space: pre-line;
+          }
+          .run-result-list {
+            background: #1e1e1e;
+            height: -webkit-fill-available;
+          }
+          .run_code {
+            position: absolute;
+            right: 0;
+            height: min-content;
+            padding: 10px 15px;
+            border: 0;
+            color: #fff;
+            background-color: #428bca;
+            font-size: 0.7rem;
+          }
+          .run-result-list{
+            height:fit-content;
+          }
+          .run-navigation{
+            color:white;
+            padding:0.5rem;
+          }
+          .running-status{
+            background:#428bca;color:white;padding:0.5rem 0.3rem; border-radius:10px;
+          }
+        </style>
+        <div class="boj-addon-menu">
+          <div class="boj-addon-nav">
+            <div class="example-popup">입력 예시창</div>
+          </div>
+          <div class="example-hint ${
+            localStorage.getItem(localStorage.getItem("path"))?.trim().length >
+            0
+              ? "hidden"
+              : ""
+          }"></div>
+        </div>
+    
+        <div id="container" style="height: 80vh; border: 1px solid black"></div>
+        <div class="run-navigation">
+          <span>실행결과</span>
+          <span class="running-status hidden">실행 중</span>
+          <button class="run_code">실행(ALT+ENTER)</button>
+        </div>
+        <div class="run-result-list"></div>
+       <script>
+        const CODE_RUNNING_TIME=500
+        let input_list =JSON.parse(localStorage.getItem('tempInput'))
+        let output_list =JSON.parse(localStorage.getItem('tempOutput'))
+        let console_stack = "";
+        var editor;
+        require.config({
+          paths: {
+            vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.26.1/min/vs",
+          },
+        });
+        require(["vs/editor/editor.main"], () => {
+          editor = monaco.editor.create(document.getElementById("container"), {
+            value: localStorage.getItem(localStorage.getItem('path')),
+            fontSize: "18px",
+            language: "javascript",
+            theme: "vs-dark",
+            minimap: { enabled: false },
+            automaticLayout: true,
+          });
+        });
+        console.log = function (...args) {
+          console_stack =
+            (console_stack === '' ? console_stack : console_stack + '\\n') +
+            [...args].join(' ');
+        };
+        const example = {
+          ex0: { button: '\\n\\n입력값 없음', code: '' },
+          ex1: {
+            button: 'input\\n\\n입력 값 1개',
+            code: 'const input = require("fs").readFileSync("/dev/stdin").toString().trim();',
+          },
+          ex2: {
+            button: 'arr[0], arr[1], ...arr[n]\\n\\n빈칸을 두고 값 정렬',
+            code: 'const arr = require("fs").readFileSync("/dev/stdin").toString().trim().split(" ");',
+          },
+          
+        ex3: {
+          button: '각 줄에 값 정렬\\n\\n예시:\\narr[0]\\narr[1]\\n...\\narr[n]',
+          code: 'const arr = require("fs").readFileSync("/dev/stdin").toString().trim().split("\\\\n");',
+        },
+        ex4: {
+          button:
+            'N\\narr[0], arr[1], ...arr[n]\\n\\n첫째 줄에 N, 두 번째 줄에 값 정렬\\n\\n',
+          code: 'const [n, ...arr] = require("fs").readFileSync("/dev/stdin").toString().trim().split("\/\\\\s\/");',
+        },
+        ex5: {
+          button:
+            'N\\narr[0]\\narr[1]\\n...\\narr[n]\\n\\n첫째 줄에 N, 두 번째줄부터 값 정렬\\n\\n',
+          code: 'const [n, ...arr] = require("fs").readFileSync("/dev/stdin").toString().trim().split("\\\\n");',
+        },
+    };
+    const $runResultList = document.querySelector(".run-result-list");
+    const $btnRunCode = document.querySelector(".run_code");
+    const $exampleHint = document.querySelector(".example-hint");
+    const runCode = (input, output, i) =>{
+
+      console_stack =""
+      require = function(fs){return {readFileSync : function(){ return input}}};
+      new Function(editor.getValue())()
+  
+      const isCorrect = console_stack[i]===output
+  
+     $runResultList.innerHTML = $runResultList.innerHTML+\`
+     <div class="\${isCorrect?"correct":"wrong"}"> 
+     <div>예제 \${i}</div>
+      <div>입력 값 : \${input}</div>
+      <div>입력 결과 : \${console_stack}</div> 
+      <div>출력 결과 : \${output}</div> 
+     </div>
+      \`
+     }
+    document.querySelector(".example-hint").innerHTML = Object.values(example)
+    .map((ex, index) => \`<button class="ex\${index}">\${ex["button"]}</button>\`).join("");
+  
+    document.querySelector('.boj-addon-menu').addEventListener('click', (e)=>{
+      if(e.target.matches('.example-popup')){   $exampleHint.classList.toggle('hidden')}
+      if(e.target.matches('button')){
+      $exampleHint.classList.add('hidden')
+      editor.setValue(example[e.target.classList[0]]["code"])}
+    })    
+    $btnRunCode.addEventListener("click", () => {
+      document.querySelector('.running-status').classList.remove("hidden");
+      input_list = JSON.parse(localStorage.getItem('tempInput'))
+      output_list= JSON.parse(localStorage.getItem('tempOutput'))
+      setTimeout(()=>{
+        $runResultList.innerHTML =''
+        output_list.forEach((output, index)=>{
+          runCode(input_list[index]||"", output, index)
+        })
+        document.querySelector('.running-status').classList.add("hidden");
+      }, CODE_RUNNING_TIME)
+
+      
+    });
+
+    window.addEventListener("keydown", (event)=>{
+      if (event.altKey && event.keyCode === 13) {
+        document.querySelector('.running-status').classList.remove("hidden");
+        input_list = JSON.parse(localStorage.getItem('tempInput'))
+        output_list= JSON.parse(localStorage.getItem('tempOutput'))
+        setTimeout(()=>{
+          $runResultList.innerHTML =''
+          output_list.forEach((output, index)=>{
+            runCode(input_list[index]||"", output, index)
+          })
+          document.querySelector('.running-status').classList.add("hidden");
+        }, CODE_RUNNING_TIME)
+    
+         }
+       })
+      window.addEventListener('beforeunload', ()=>{
+        if(editor.getValue().trim().length> 0) localStorage.setItem(localStorage.getItem("path"),editor.getValue())
+        else{localStorage.removeItem(localStorage.getItem("path"))}
+      })
+       </script>
+      </body>
+    </html>
+  `;
+  }
+})();

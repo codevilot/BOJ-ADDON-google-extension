@@ -32,18 +32,22 @@
 .row.hide_code > .run_div {
   transform: translateX(200%);
 }
-.run_div {
+
+.boj-addon {
   z-index: 1;
 
   transition: 1s all;
   position: fixed;
-  height: calc(100vh - 50px);
-  top: 50px;
-  left: calc(50% - 15px);
+  height: calc(100vh);
+  top: 0px;
+  left: calc(50%);
   background: #1e1e1e;
   width: 50%;
   padding-top: 2rem;
   padding-bottom: 2rem;
+}
+.sampledata {
+  width: -webkit-fill-available;
 }
 .input_selector {
   transform: translate(100%);
@@ -86,7 +90,8 @@
   color: #fff;
   background-color: #428bca;
 }
-.btn-add-sample {
+.btn-add-sample,
+.btn-add-check {
   border: 0;
   color: #fff;
   background-color: #428bca;
