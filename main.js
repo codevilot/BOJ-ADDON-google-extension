@@ -233,6 +233,9 @@
             border-left:0;
             border-top:0;
           }
+          .example-popup{
+            padding-bottom:0.5rem;
+          }
         </style>
         <div class="boj-addon-menu">
           <div class="boj-addon-nav">
