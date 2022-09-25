@@ -7,11 +7,9 @@
   width: calc(var(--code-window-width) * 1%);
   margin: inherit;
 }
-.navbar .container {
-  width: auto;
-}
+.navbar .container,
 .topbar .container {
-  width: calc(var(--code-window-width) * 2%);
+  width: auto;
 }
 .header {
   width: calc(var(--code-window-width) * 1%);

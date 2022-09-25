@@ -1,5 +1,5 @@
 (() => {
-  const resizeBar = () => {
+  const resizer = (() => {
     const bar = document.createElement("div");
     document.querySelector(".wrapper").append(bar);
     bar.classList.add("resize-bar");
@@ -11,18 +11,18 @@
     </div>
     `;
     return bar;
-  };
-  const resizer = resizeBar();
-  const resizing = (cursor) => {
-    const rootStyle = document.querySelector(":root").style;
-    const resizeBarWidth = 40;
-    console.log(resizeBarWidth, rootStyle);
-    rootStyle.setProperty(
-      "--code-window-width",
-      ((cursor.x + resizeBarWidth) / parseInt(window.innerWidth)) * 100
-    );
-  };
+  })();
+
   resizer.addEventListener("mousedown", () => {
+    const resizing = (cursor) => {
+      const rootStyle = document.querySelector(":root").style;
+      const resizeBarWidth = 40;
+      console.log(resizeBarWidth, rootStyle);
+      rootStyle.setProperty(
+        "--code-window-width",
+        ((cursor.x + resizeBarWidth) / parseInt(window.innerWidth)) * 100
+      );
+    };
     document.addEventListener("mousemove", resizing, false);
     document.addEventListener(
       "mouseup",
@@ -41,60 +41,59 @@
   function createSampleNode(sampleNumber) {
     const sampleNode = document.createElement("div");
     sampleNode.innerHTML = `
-  <div class="col-md-12">
-  <div class="row">
-    <div class="col-md-6">
-      <section id="sampleinput${sampleNumber}">
-        <div class="headline">
-          <h2>
-            예제 입력 ${sampleNumber}
-            <button
-              type="button"
-              class="btn btn-link copy-button"
-              style="padding: 0px"
-              data-clipboard-target="#sample-input-${sampleNumber}"
-            >
-              복사
-            </button>
-          </h2>
+      <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-6">
+          <section id="sampleinput${sampleNumber}">
+            <div class="headline">
+              <h2>
+                예제 입력 ${sampleNumber}
+                <button
+                  type="button"
+                  class="btn btn-link copy-button"
+                  style="padding: 0px"
+                  data-clipboard-target="#sample-input-${sampleNumber}"
+                >
+                  복사
+                </button>
+              </h2>
+            </div>
+            <textarea class="sampledata" id="sample-input-${sampleNumber}">입력을 입력해주세요</textarea>
+          </section>
         </div>
-        <textarea class="sampledata" id="sample-input-${sampleNumber}">입력을 입력해주세요</textarea>
-      </section>
-    </div>
-    <div class="col-md-6">
-      <section id="sampleoutput${sampleNumber}">
-        <div class="headline">
-          <h2>
-            예제 출력 ${sampleNumber}
-            <button
-              type="button"
-              class="btn btn-link copy-button"
-              style="padding: 0px"
-              data-clipboard-target="#sample-output-${sampleNumber}"
-            >
-              복사
-            </button>
-          </h2>
+        <div class="col-md-6">
+          <section id="sampleoutput${sampleNumber}">
+            <div class="headline">
+              <h2>
+                예제 출력 ${sampleNumber}
+                <button
+                  type="button"
+                  class="btn btn-link copy-button"
+                  style="padding: 0px"
+                  data-clipboard-target="#sample-output-${sampleNumber}"
+                >
+                  복사
+                </button>
+              </h2>
+            </div>
+            <textarea class="sampledata" id="sample-output-${sampleNumber}">출력을 입력해주세요</textarea>
+          </section>
         </div>
-        <textarea class="sampledata" id="sample-output-${sampleNumber}">출력을 입력해주세요</textarea>
-      </section>
+      </div>
     </div>
-  </div>
-</div>
   `;
     hintPosition.before(sampleNode);
   }
-  function readInput() {
+  const readInput = () => {
     const input_list = [];
     document
       .querySelectorAll(`[id*="sample-input-"]`)
-
       .forEach((element) =>
         input_list.push(element.innerText ? element.innerText : element.value)
       );
     return input_list;
-  }
-  function readOutput() {
+  };
+  const readOutput = () => {
     const output_list = [];
     document
       .querySelectorAll(`[id*="sample-output-"]`)
@@ -102,20 +101,20 @@
         output_list.push(element.innerText ? element.innerText : element.value)
       );
     return output_list;
-  }
-  function insertSample() {
+  };
+  const insertSample = () => {
     localStorage.setItem("tempInput", JSON.stringify(readInput()));
     localStorage.setItem("tempOutput", JSON.stringify(readOutput()));
-  }
-  function getSampleNumber() {
-    return document.querySelectorAll(`[id*="sample-input-"]`).length;
-  }
-  function createSample() {
+  };
+  const getSampleNumber = () =>
+    document.querySelectorAll(`[id*="sample-input-"]`).length;
+  const createSample = () => {
     const sampleButton = document.createElement("button");
     const checkButton = document.createElement("button");
     const hintPosition = document
       .getElementById("problem_hint")
       .closest(".col-md-12");
+
     sampleButton.innerText = "예제 추가하기";
     checkButton.innerText = "예제 적용하기";
     hintPosition.after(sampleButton);
@@ -126,7 +125,7 @@
       createSampleNode(getSampleNumber())
     );
     checkButton.addEventListener("click", () => insertSample());
-  }
+  };
   localStorage.setItem("path", window.location.pathname);
   createSample();
   insertSample();
