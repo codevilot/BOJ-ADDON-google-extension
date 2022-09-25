@@ -84,30 +84,20 @@
   `;
     hintPosition.before(sampleNode);
   }
-  const readInput = () => {
-    const input_list = [];
-    document
-      .querySelectorAll(`[id*="sample-input-"]`)
-      .forEach((element) =>
-        input_list.push(element.innerText ? element.innerText : element.value)
-      );
-    return input_list;
-  };
-  const readOutput = () => {
-    const output_list = [];
-    document
-      .querySelectorAll(`[id*="sample-output-"]`)
-      .forEach((element) =>
-        output_list.push(element.innerText ? element.innerText : element.value)
-      );
-    return output_list;
-  };
+
   const insertSample = () => {
+    const readInput = () =>
+      [...document.querySelectorAll(`[id*="sample-input-"]`)].map((input) =>
+        input.innerText ? input.innerText : input.value
+      );
+    const readOutput = () =>
+      [...document.querySelectorAll(`[id*="sample-output-"]`)].map((output) =>
+        output.innerText ? output.innerText : output.value
+      );
     localStorage.setItem("tempInput", JSON.stringify(readInput()));
     localStorage.setItem("tempOutput", JSON.stringify(readOutput()));
   };
-  const getSampleNumber = () =>
-    document.querySelectorAll(`[id*="sample-input-"]`).length;
+
   const createSample = () => {
     const sampleButton = document.createElement("button");
     const checkButton = document.createElement("button");
@@ -121,6 +111,8 @@
     hintPosition.after(checkButton);
     sampleButton.classList.add("btn-add-sample");
     checkButton.classList.add("btn-add-check");
+    const getSampleNumber = () =>
+      document.querySelectorAll(`[id*="sample-input-"]`).length;
     sampleButton.addEventListener("click", () =>
       createSampleNode(getSampleNumber())
     );
@@ -157,10 +149,26 @@
       
       </script>
         <style>
+          ::-webkit-scrollbar {
+            width: 10px;
+          }
+          ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+          }
+          ::-webkit-scrollbar-thumb {
+            background: #888;
+          }
+
+          ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+          }
+
           body {
             margin: 0px;
             height: 100vh;
             padding-left:1rem;
+            padding-right:1rem;
+            border-radius:10px;
           }
           .hidden {
             display: none;
@@ -177,21 +185,25 @@
             padding: 0.5rem 0.3rem;
           }
           .example-hint {
-            background: #1e1e1e;
             position: absolute;
+            background-color:rgb(50,50,50,1);
             z-index: 1;
           }
-          .example-hint button {
-            display: block;
-            white-space: pre-line;
-          }
+
           .run-result-list {
             background: #1e1e1e;
-            height: -webkit-fill-available;
+            height: 20vh;
+            overflow-y:scroll;
+          }
+          .run-result-list > div{
+            padding:0.3rem;
+            margin-bottom:0.3rem;
+            background-color:rgba(255, 255, 255, 0.1);
           }
           .run_code {
             position: absolute;
             right: 0;
+            top:0;
             height: min-content;
             padding: 10px 15px;
             border: 0;
@@ -199,15 +211,27 @@
             background-color: #428bca;
             font-size: 0.7rem;
           }
-          .run-result-list{
-            height:fit-content;
-          }
           .run-navigation{
+            position:relative;
             color:white;
             padding:0.5rem;
           }
           .running-status{
-            background:#428bca;color:white;padding:0.5rem 0.3rem; border-radius:10px;
+            background:#428bca;color:white;padding:0.1rem 0.5rem;margin-left:1rem; border-radius:5px;
+          }
+          .example-hint button {
+            display: block;
+            white-space: pre-line;
+            text-align:left;
+            width:100%;
+            background: none;
+            color: white;
+            padding:0.5rem 1rem;
+            margin-bottom:1rem;
+            border-bottom:1px solid white;
+            border-right:0;
+            border-left:0;
+            border-top:0;
           }
         </style>
         <div class="boj-addon-menu">
@@ -222,7 +246,7 @@
           }"></div>
         </div>
     
-        <div id="container" style="height: 80vh; border: 1px solid black"></div>
+        <div id="container" style="height: calc( 80vh - 6rem ); border: 1px solid black"></div>
         <div class="run-navigation">
           <span>실행결과</span>
           <span class="running-status hidden">실행 중</span>
@@ -256,7 +280,7 @@
             [...args].join(' ');
         };
         const example = {
-          ex0: { button: '\\n\\n입력값 없음', code: '' },
+          ex0: { button: '입력값 없음', code: '' },
           ex1: {
             button: 'input\\n\\n입력 값 1개',
             code: 'const input = require("fs").readFileSync("/dev/stdin").toString().trim();',
@@ -267,17 +291,17 @@
           },
           
         ex3: {
-          button: '각 줄에 값 정렬\\n\\n예시:\\narr[0]\\narr[1]\\n...\\narr[n]',
+          button: 'arr[0]\\narr[1]\\n...\\narr[n]\\n\\n각 줄에 값 정렬',
           code: 'const arr = require("fs").readFileSync("/dev/stdin").toString().trim().split("\\\\n");',
         },
         ex4: {
           button:
-            'N\\narr[0], arr[1], ...arr[n]\\n\\n첫째 줄에 N, 두 번째 줄에 값 정렬\\n\\n',
+            'N\\narr[0], arr[1], ...arr[n]\\n\\n첫째 줄에 N, 두 번째 줄에 값 정렬\\n',
           code: 'const [n, ...arr] = require("fs").readFileSync("/dev/stdin").toString().trim().split("\/\\\\s\/");',
         },
         ex5: {
           button:
-            'N\\narr[0]\\narr[1]\\n...\\narr[n]\\n\\n첫째 줄에 N, 두 번째줄부터 값 정렬\\n\\n',
+            'N\\narr[0]\\narr[1]\\n...\\narr[n]\\n\\n첫째 줄에 N, 두 번째줄부터 값 정렬\\n',
           code: 'const [n, ...arr] = require("fs").readFileSync("/dev/stdin").toString().trim().split("\\\\n");',
         },
     };
@@ -290,7 +314,7 @@
       require = function(fs){return {readFileSync : function(){ return input}}};
       new Function(editor.getValue())()
   
-      const isCorrect = console_stack[i]===output
+      const isCorrect = (console_stack.trim()===output.trim())
   
      $runResultList.innerHTML = $runResultList.innerHTML+\`
      <div class="\${isCorrect?"correct":"wrong"}"> 

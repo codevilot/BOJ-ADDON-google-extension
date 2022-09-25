@@ -60,7 +60,6 @@
   left: calc(var(--code-window-width) * 1%);
   background: #1e1e1e;
   width: calc((100 - var(--code-window-width)) * 1%);
-  padding-top: 2rem;
   padding-bottom: 2rem;
 }
 .sampledata {
