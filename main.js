@@ -1,4 +1,40 @@
 (() => {
+  const resizeBar = () => {
+    const bar = document.createElement("div");
+    document.querySelector(".wrapper").append(bar);
+    bar.classList.add("resize-bar");
+    bar.innerHTML = `
+    <div class="resize-icon">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    `;
+    return bar;
+  };
+  const resizer = resizeBar();
+  const resizing = (cursor) => {
+    const rootStyle = document.querySelector(":root").style;
+    const resizeBarWidth = 40;
+    console.log(resizeBarWidth, rootStyle);
+    rootStyle.setProperty(
+      "--code-window-width",
+      ((cursor.x + resizeBarWidth) / parseInt(window.innerWidth)) * 100
+    );
+  };
+  resizer.addEventListener("mousedown", () => {
+    document.addEventListener("mousemove", resizing, false);
+    document.addEventListener(
+      "mouseup",
+      () => {
+        document.removeEventListener("mousemove", resizing, false);
+      },
+      false
+    );
+  });
+})();
+
+(() => {
   const hintPosition = document
     .getElementById("problem_hint")
     .closest(".col-md-12");
@@ -86,12 +122,10 @@
     hintPosition.after(checkButton);
     sampleButton.classList.add("btn-add-sample");
     checkButton.classList.add("btn-add-check");
-    sampleButton.addEventListener("click", () => {
-      createSampleNode(getSampleNumber());
-    });
-    checkButton.addEventListener("click", () => {
-      insertSample();
-    });
+    sampleButton.addEventListener("click", () =>
+      createSampleNode(getSampleNumber())
+    );
+    checkButton.addEventListener("click", () => insertSample());
   }
   localStorage.setItem("path", window.location.pathname);
   createSample();

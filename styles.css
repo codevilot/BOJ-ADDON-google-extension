@@ -1,12 +1,14 @@
 :root {
   --code-window-width: 50;
+  --resize-bar-width: 10;
 }
+
 .wrapper .container.content {
   width: calc(var(--code-window-width) * 1%);
   margin: inherit;
 }
 .navbar .container {
-  width: calc(var(--code-window-width) * 2%);
+  width: auto;
 }
 .topbar .container {
   width: calc(var(--code-window-width) * 2%);
@@ -14,13 +16,31 @@
 .header {
   width: calc(var(--code-window-width) * 1%);
 }
-
+.resize-bar {
+  position: absolute;
+  z-index: 3;
+  top: 0px;
+  left: calc(var(--code-window-width) * 1% - 10px);
+  height: 100%;
+  width: calc(var(--resize-bar-width) * 1px);
+}
+.resize-icon {
+  position: fixed;
+  display: flex;
+  width: calc(var(--resize-bar-width) * 1px);
+  top: 50%;
+  transform: translate3d(0, -50%, 0);
+  justify-content: space-between;
+}
+.resize-icon div {
+  width: 1px;
+  height: 40px;
+  background-color: black;
+}
 .wrapper {
   position: relative;
 }
-.content > .row {
-  transition: 1s all;
-}
+
 .content > .row.question_full {
   width: 100% !important;
 }
@@ -36,13 +56,12 @@
 .boj-addon {
   z-index: 1;
 
-  transition: 1s all;
   position: fixed;
   height: calc(100vh);
   top: 0px;
-  left: calc(50%);
+  left: calc(var(--code-window-width) * 1%);
   background: #1e1e1e;
-  width: 50%;
+  width: calc((100 - var(--code-window-width)) * 1%);
   padding-top: 2rem;
   padding-bottom: 2rem;
 }
