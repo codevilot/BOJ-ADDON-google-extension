@@ -278,9 +278,15 @@
           });
         });
         console.log = function (...args) {
-          console_stack =
-            (console_stack === '' ? console_stack : console_stack + '\\n') +
-            [...args].join(' ');
+          console_stack = console_stack +
+            (console_stack === '' ? '' : '\\n') +
+            [...args].map(arg=>
+              arg instanceof Set ||
+                arg instanceof Map ? JSON.stringify([...arg]) :
+                arg instanceof Array || 
+                arg instanceof Object? JSON.stringify(arg):
+                arg
+              ).join(' ');
         };
         const example = {
           ex0: { button: '입력값 없음', code: '' },
