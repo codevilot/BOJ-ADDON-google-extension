@@ -100,23 +100,18 @@
 
   const createSample = () => {
     const sampleButton = document.createElement("button");
-    const checkButton = document.createElement("button");
     const hintPosition = document
       .getElementById("problem_hint")
       .closest(".col-md-12");
 
     sampleButton.innerText = "예제 추가하기";
-    checkButton.innerText = "예제 적용하기";
     hintPosition.after(sampleButton);
-    hintPosition.after(checkButton);
     sampleButton.classList.add("btn-add-sample");
-    checkButton.classList.add("btn-add-check");
     const getSampleNumber = () =>
       document.querySelectorAll(`[id*="sample-input-"]`).length;
     sampleButton.addEventListener("click", () =>
       createSampleNode(getSampleNumber())
     );
-    checkButton.addEventListener("click", () => insertSample());
   };
   localStorage.setItem("path", window.location.pathname);
   createSample();
