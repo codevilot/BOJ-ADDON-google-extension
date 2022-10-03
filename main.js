@@ -100,18 +100,23 @@
 
   const createSample = () => {
     const sampleButton = document.createElement("button");
+    const checkButton = document.createElement("button");
     const hintPosition = document
       .getElementById("problem_hint")
       .closest(".col-md-12");
 
     sampleButton.innerText = "예제 추가하기";
+    checkButton.innerText = "예제 적용하기";
     hintPosition.after(sampleButton);
+    hintPosition.after(checkButton);
     sampleButton.classList.add("btn-add-sample");
+    checkButton.classList.add("btn-add-check");
     const getSampleNumber = () =>
       document.querySelectorAll(`[id*="sample-input-"]`).length;
     sampleButton.addEventListener("click", () =>
       createSampleNode(getSampleNumber())
     );
+    checkButton.addEventListener("click", () => insertSample());
   };
   localStorage.setItem("path", window.location.pathname);
   createSample();
@@ -140,9 +145,6 @@
         <title>BOJ addon</title>
       </head>
       <body>
-      <script>
-      
-      </script>
         <style>
           ::-webkit-scrollbar {
             width: 10px;
@@ -157,13 +159,13 @@
           ::-webkit-scrollbar-thumb:hover {
             background: #555;
           }
-
           body {
             margin: 0px;
             height: 100vh;
             padding-left:1rem;
             padding-right:1rem;
             border-radius:10px;
+            background: #1e1e1e;  
           }
           .hidden {
             display: none;
@@ -174,17 +176,20 @@
           .wrong {
             color: red;
           }
+
           .boj-addon-menu {
             background: #1e1e1e;
             color: white;
             padding: 0.5rem 0.3rem;
           }
+
           .example-hint {
             position: absolute;
             background-color:rgb(50,50,50,1);
             z-index: 1;
+            top:2.5rem;
           }
-
+          
           .run-result-list {
             background: #1e1e1e;
             height: 20vh;
@@ -231,6 +236,10 @@
           .example-popup{
             padding-bottom:0.5rem;
           }
+          .boj-addon-nav {
+            display: flex;
+            gap: 1rem;
+          }
         </style>
         <div class="boj-addon-menu">
           <div class="boj-addon-nav">
@@ -272,6 +281,9 @@
             automaticLayout: true,
           });
         });
+
+        
+
         console.log = function (...args) {
           console_stack = console_stack +
             (console_stack === '' ? '' : '\\n') +
@@ -333,7 +345,6 @@
     .map((ex, index) => \`<button class="ex\${index}">\${ex["button"]}</button>\`).join("");
   
     document.querySelector('.boj-addon-menu').addEventListener('click', (e)=>{
-      if(e.target.matches('.example-popup')){   $exampleHint.classList.toggle('hidden')}
       if(e.target.matches('button')){
       $exampleHint.classList.add('hidden')
       editor.setValue(example[e.target.classList[0]]["code"])}
@@ -372,6 +383,8 @@
         if(editor.getValue().trim().length> 0) localStorage.setItem(localStorage.getItem("path"),editor.getValue())
         else{localStorage.removeItem(localStorage.getItem("path"))}
       })
+      document.body.addEventListener('click', ({target})=>
+    {  if(!target.closest('.boj-addon-menu')) $exampleHint.classList.add('hidden')})
        </script>
       </body>
     </html>

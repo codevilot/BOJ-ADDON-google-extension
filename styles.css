@@ -53,14 +53,11 @@
 
 .boj-addon {
   z-index: 1;
-
   position: fixed;
   height: calc(100vh);
   top: 0px;
   left: calc(var(--code-window-width) * 1%);
-  background: #1e1e1e;
   width: calc((100 - var(--code-window-width)) * 1%);
-  padding-bottom: 2rem;
 }
 .sampledata {
   width: -webkit-fill-available;
