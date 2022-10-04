@@ -345,6 +345,7 @@
     .map((ex, index) => \`<button class="ex\${index}">\${ex["button"]}</button>\`).join("");
   
     document.querySelector('.boj-addon-menu').addEventListener('click', (e)=>{
+      if(e.target.matches('.example-popup')){   $exampleHint.classList.toggle('hidden')}
       if(e.target.matches('button')){
       $exampleHint.classList.add('hidden')
       editor.setValue(example[e.target.classList[0]]["code"])}
@@ -384,7 +385,7 @@
         else{localStorage.removeItem(localStorage.getItem("path"))}
       })
       document.body.addEventListener('click', ({target})=>
-    {  if(!target.closest('.boj-addon-menu')) $exampleHint.classList.add('hidden')})
+      {if(!target.closest('.boj-addon-nav')) $exampleHint.classList.add('hidden')})
        </script>
       </body>
     </html>
