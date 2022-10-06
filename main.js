@@ -383,8 +383,10 @@
         if(editor.getValue().trim().length> 0) localStorage.setItem(localStorage.getItem("path"),editor.getValue())
         else{localStorage.removeItem(localStorage.getItem("path"))}
       })
-      document.body.addEventListener('click', ({target})=>
-    {  if(!target.closest('.boj-addon-menu')) $exampleHint.classList.add('hidden')})
+      document.body.addEventListener('click', ({target})=> { 
+        if(target.matches('.example-popup')) {$exampleHint.classList.toggle('hidden')}
+       else if(!target.closest('.example-hint'))  {$exampleHint.classList.add('hidden')}
+      })
        </script>
       </body>
     </html>
