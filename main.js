@@ -1,3 +1,6 @@
+//over stack
+//process
+//pre
 (() => {
   const resizer = (() => {
     const bar = document.createElement("div");
@@ -283,7 +286,6 @@
         });
 
         
-
         console.log = function (...args) {
           console_stack = console_stack +
             (console_stack === '' ? '' : '\\n') +
@@ -327,7 +329,11 @@
     const runCode = (input, output, i) =>{
 
       console_stack =""
-      require = function(fs){return {readFileSync : function(){ return input}}};
+      require = function(fs){
+        process = {
+          platform :"linux"
+        };
+        return {readFileSync : function(){ return input}}};
       new Function(editor.getValue())()
   
       const isCorrect = (console_stack.trim()===output.trim())
@@ -336,8 +342,10 @@
      <div class="\${isCorrect?"correct":"wrong"}"> 
      <div>예제 \${i}</div>
       <div>입력 값 : \${input}</div>
-      <div>입력 결과 : \${console_stack}</div> 
-      <div>출력 결과 : \${output}</div> 
+      <pre>입력 결과 : 
+\${console_stack}</pre> 
+      <pre>출력 결과 : 
+\${output}</pre> 
      </div>
       \`
      }
