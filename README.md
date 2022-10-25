@@ -4,6 +4,9 @@
 현재는 **Node.js**로만 문제풀이가 가능하며, 추후 다른 언어 문제풀이 추가도 추가할 예정입니다.</br></br>
 익스텐션이 추가적인 요청 사항을 **이슈**에 남겨주시면 추가로 수정하겠습니다. </br></br>
 
+## FE를 위한 크롬 익스텐션 개발기
+https://careerly.co.kr/comments/70068
+
 ## 설치 방법
 1. [백준 애드온 크롬 웹 스토어](https://chrome.google.com/webstore/detail/boj-addon/okppngggdhclomfpdomgdpdndfgdljhb?hl=ko) 로 이동해서 크롬 익스텐션을 설치한다.</br>
 2. [백준 온라인 저지 예제](https://www.acmicpc.net/problem/2557)에서 설치가 되었는지 확인한다.</br></br>
