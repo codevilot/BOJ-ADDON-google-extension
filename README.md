@@ -5,7 +5,7 @@
 추가적인 요청 사항을 **이슈**에 남겨주시면 추가로 수정하겠습니다. </br></br>
 
 ## FE를 위한 크롬 익스텐션 개발기
-https://careerly.co.kr/comments/70068
+https://codevil.tistory.com/222
 
 ## 설치 방법
 1. [백준 애드온 크롬 웹 스토어](https://chrome.google.com/webstore/detail/boj-addon/okppngggdhclomfpdomgdpdndfgdljhb?hl=ko) 로 이동해서 크롬 익스텐션을 설치한다.</br>
