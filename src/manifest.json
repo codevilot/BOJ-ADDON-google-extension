@@ -4,9 +4,10 @@
   "version": "1.0.2",
   "description": "BOJ Addon",
   "author": "Namheon Baek",
+
   "content_scripts": [
     {
-      "css": ["styles.css"],
+      "css": ["style.css"],
       "js": ["main.js"],
       "matches": ["https://www.acmicpc.net/problem/*"],
       "exclude_matches": [

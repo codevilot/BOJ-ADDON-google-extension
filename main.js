@@ -256,7 +256,7 @@
           }"></div>
         </div>
     
-        <div id="container" style="height: calc( 80vh - 6rem ); border: 1px solid black"></div>
+       
         <div class="run-navigation">
           <span>실행결과</span>
           <span class="running-status hidden">실행 중</span>
@@ -307,21 +307,20 @@
             button: 'arr[0], arr[1], ...arr[n]\\n\\n빈칸을 두고 값 정렬',
             code: 'const arr = require("fs").readFileSync("/dev/stdin").toString().trim().split(" ");',
           },
-          
-        ex3: {
-          button: 'arr[0]\\narr[1]\\n...\\narr[n]\\n\\n각 줄에 값 정렬',
-          code: 'const arr = require("fs").readFileSync("/dev/stdin").toString().trim().split("\\\\n");',
-        },
-        ex4: {
-          button:
-            'N\\narr[0], arr[1], ...arr[n]\\n\\n첫째 줄에 N, 두 번째 줄에 값 정렬\\n',
-          code: 'const [n, ...arr] = require("fs").readFileSync("/dev/stdin").toString().trim().split("\/\\\\s\/");',
-        },
-        ex5: {
-          button:
-            'N\\narr[0]\\narr[1]\\n...\\narr[n]\\n\\n첫째 줄에 N, 두 번째줄부터 값 정렬\\n',
-          code: 'const [n, ...arr] = require("fs").readFileSync("/dev/stdin").toString().trim().split("\\\\n");',
-        },
+         ex3: {
+            button: 'arr[0]\\narr[1]\\n...\\narr[n]\\n\\n각 줄에 값 정렬',
+            code: 'const arr = require("fs").readFileSync("/dev/stdin").toString().trim().split("\\\\n");',
+          },
+          ex4: {
+            button:
+              'N\\narr[0], arr[1], ...arr[n]\\n\\n첫째 줄에 N, 두 번째 줄에 값 정렬\\n',
+            code: 'const [n, ...arr] = require("fs").readFileSync("/dev/stdin").toString().trim().split("\/\\\\s\/");',
+          },
+          ex5: {
+            button:
+              'N\\narr[0]\\narr[1]\\n...\\narr[n]\\n\\n첫째 줄에 N, 두 번째줄부터 값 정렬\\n',
+            code: 'const [n, ...arr] = require("fs").readFileSync("/dev/stdin").toString().trim().split("\\\\n");',
+          },
     };
     const $runResultList = document.querySelector(".run-result-list");
     const $btnRunCode = document.querySelector(".run_code");
@@ -343,12 +342,12 @@
      <div>예제 \${i}</div>
       <div>입력 값 : \${input}</div>
       <pre>입력 결과 : 
-\${console_stack}</pre> 
-      <pre>출력 결과 : 
-\${output}</pre> 
-     </div>
-      \`
-     }
+      \${console_stack}</pre> 
+            <pre>출력 결과 : 
+      \${output}</pre> 
+          </div>
+            \`
+      }
     document.querySelector(".example-hint").innerHTML = Object.values(example)
     .map((ex, index) => \`<button class="ex\${index}">\${ex["button"]}</button>\`).join("");
   

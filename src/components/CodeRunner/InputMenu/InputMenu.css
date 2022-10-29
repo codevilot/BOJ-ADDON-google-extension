@@ -1,0 +1,36 @@
+.boj-addon-menu {
+  background: #1e1e1e;
+  color: white;
+  padding: 0.5rem 0.3rem;
+}
+.boj-addon-nav {
+  display: flex;
+  gap: 1rem;
+}
+.example-popup {
+  padding-bottom: 0.5rem;
+}
+.example-hint {
+  position: absolute;
+  background-color: rgb(50, 50, 50, 1);
+  z-index: 1;
+  top: 5rem;
+}
+.example-hint button {
+  font-size: 16px;
+  display: block;
+  white-space: pre-line;
+  text-align: left;
+  width: 100%;
+  background: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid white;
+  border-right: 0;
+  border-left: 0;
+  border-top: 0;
+}
+.folded {
+  display: none;
+}

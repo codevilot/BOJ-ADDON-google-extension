@@ -1,0 +1,13 @@
+.wrong {
+  color: red;
+  padding: 0.3rem;
+  margin-bottom: 0.3rem;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.correct {
+  color: green;
+  padding: 0.3rem;
+  margin-bottom: 0.3rem;
+  background-color: rgba(255, 255, 255, 0.1);
+}
