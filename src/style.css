@@ -1,0 +1,114 @@
+:root {
+  --code-window-width: 50;
+  --resize-bar-width: 10;
+}
+
+.wrapper .container.content {
+  width: calc(var(--code-window-width) * 1%);
+  margin: inherit;
+}
+.navbar .container,
+.topbar .container {
+  width: auto;
+}
+.header {
+  width: calc(var(--code-window-width) * 1%);
+}
+.resize-bar {
+  position: absolute;
+  z-index: 3;
+  top: 0px;
+  left: calc(var(--code-window-width) * 1% - 10px);
+  height: 100%;
+  width: calc(var(--resize-bar-width) * 1px);
+}
+.resize-icon {
+  position: fixed;
+  display: flex;
+  width: calc(var(--resize-bar-width) * 1px);
+  top: 50%;
+  transform: translate3d(0, -50%, 0);
+  justify-content: space-between;
+}
+.resize-icon div {
+  width: 1px;
+  height: 40px;
+  background-color: black;
+}
+.wrapper {
+  position: relative;
+}
+
+.content > .row.question_full {
+  width: 100% !important;
+}
+
+.row.code > .run_div {
+  max-width: 100vw;
+  left: 0;
+}
+.row.hide_code > .run_div {
+  transform: translateX(200%);
+}
+
+.boj-addon {
+  z-index: 1;
+  position: fixed;
+  height: calc(100vh);
+  top: 0px;
+  left: calc(var(--code-window-width) * 1%);
+  width: calc((100 - var(--code-window-width)) * 1%);
+}
+.sampledata {
+  width: -webkit-fill-available;
+}
+.input_selector {
+  transform: translate(100%);
+  z-index: 2;
+  position: fixed;
+  height: calc(100vh - 50px);
+  top: 50px;
+  left: 15px;
+  background: #1e1e1e;
+  width: 50%;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+.input_selector button {
+  display: flex;
+  justify-content: left;
+  text-align-last: left;
+  width: 50%;
+  white-space: pre-wrap;
+}
+.displayNone {
+  display: none;
+}
+.iframe_controller {
+  position: fixed;
+  height: 42px;
+  top: 0px;
+  left: 50%;
+  display: flex;
+  gap: 10px;
+  background-color: white;
+  z-index: 1;
+}
+.iframe_controller button {
+  background: none;
+  border: none;
+  padding: 10px 15px;
+}
+.iframe_controller .on {
+  color: #fff;
+  background-color: #428bca;
+}
+.btn-add-sample,
+.btn-add-check {
+  border: 0;
+  color: #fff;
+  background-color: #428bca;
+  font-size: 2rem;
+  margin-left: 15px;
+  padding: 1rem;
+}
