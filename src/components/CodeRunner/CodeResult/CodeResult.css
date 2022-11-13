@@ -1,0 +1,30 @@
+.run-navigation {
+  position: relative;
+  color: white;
+  padding: 0.5rem;
+}
+
+.running-status {
+  background: #428bca;
+  color: white;
+  padding: 0.1rem 0.5rem;
+  margin-left: 1rem;
+  border-radius: 5px;
+}
+.run_code {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: min-content;
+  padding: 10px 15px;
+  border: 0;
+  color: #fff;
+  background-color: #428bca;
+  font-size: 0.7rem;
+}
+.run-result-list {
+  background: #1e1e1e;
+  height: 20vh;
+  overflow-y: scroll;
+  font: white;
+}
