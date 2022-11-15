@@ -1,18 +1,17 @@
 #Editor {
   width: 100%;
-  height: calc(80vh - 6rem);
+  height: calc(100% - 48px);
 }
+
 #code-runner {
   margin: 0px;
   height: 100vh;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  border-radius: 10px;
-  background: #1e1e1e;
+  padding-left: var(--resize-bar);
+  padding-right: var(--resize-bar);
+  background: var(--background-color);
   font-size: 20px;
   z-index: 1;
   position: fixed;
-  height: calc(100vh);
   top: 0px;
   left: calc(var(--code-window-width) * 1%);
   width: calc((100 - var(--code-window-width)) * 1%);

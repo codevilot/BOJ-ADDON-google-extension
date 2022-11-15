@@ -194,7 +194,7 @@
           }
           
           .run-result-list {
-            background: #1e1e1e;
+            background: #262626;
             height: 20vh;
             overflow-y:scroll;
           }

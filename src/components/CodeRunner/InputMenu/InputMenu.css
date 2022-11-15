@@ -1,5 +1,5 @@
 .boj-addon-menu {
-  background: #1e1e1e;
+  background: #262626;
   color: white;
   padding: 0.5rem 0.3rem;
 }
@@ -7,8 +7,11 @@
   display: flex;
   gap: 1rem;
 }
+
 .example-popup {
   padding-bottom: 0.5rem;
+  background: none;
+  border: 0;
 }
 .example-hint {
   position: absolute;

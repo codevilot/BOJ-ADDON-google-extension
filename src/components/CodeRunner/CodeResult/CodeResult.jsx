@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import { ResultBlock } from "./ResultBlock/ResultBlock.jsx";
 import { IsJSONString } from "../../../utils/IsJSONString.jsx";
 import "./CodeResult.css";
-export const CodeResult = ({ clickEvent }) => {
+export const CodeResult = ({ clickEvent, dragEvent, resizeY }) => {
   const [print, setPrint] = useState([]);
-
   useEffect(() => {
     window.addEventListener("message", (e) => {
       const json = IsJSONString(e.data);
@@ -13,10 +12,18 @@ export const CodeResult = ({ clickEvent }) => {
     });
   }, []);
   return (
-    <>
+    <div style={{ height: "100%" }}>
+      <div
+        id="resize-horizontal"
+        draggable="true"
+        onDrag={({ clientY }) => {
+          if (clientY !== 0) dragEvent(clientY);
+        }}
+      ></div>
       <div className="run-navigation">
         <span>실행결과</span>
         <span className="running-status close">실행 중</span>
+
         <button onClick={clickEvent} className="run_code">
           실행(ALT(⌘)+ENTER)
         </button>
@@ -33,6 +40,6 @@ export const CodeResult = ({ clickEvent }) => {
               />
             ))}
       </div>
-    </>
+    </div>
   );
 };

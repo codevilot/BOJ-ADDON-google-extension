@@ -32,7 +32,7 @@ iframe.srcdoc = `
         return {readFileSync : function(){ return input}}
       };
       
-      new Function(code)()
+        new Function(code)()
       const isCorrect = (console_stack.trim()===output.trim())
       message.push({input, output, result:console_stack})
     }
@@ -42,6 +42,9 @@ iframe.srcdoc = `
       message=[]
       input.forEach((item,index) => runCode(input[index], output[index], code, index))
       window.parent.postMessage(JSON.stringify(message), '*' );
+    });
+    window.addEventListener("error", (event) => {
+      window.parent.postMessage(JSON.stringify([{input:event.type, output:event.message, result:"error"}]), '*')
     });
 
     </script>

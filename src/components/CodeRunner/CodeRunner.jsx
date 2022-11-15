@@ -1,4 +1,4 @@
-import { useRef, useEffect, useContext } from "react";
+import { useRef, useEffect, useContext, useState } from "react";
 import * as monaco from "monaco-editor";
 import "./CodeRunner.css";
 import { InputMenu } from "./InputMenu/InputMenu.jsx";
@@ -8,7 +8,7 @@ import { Message } from "../../utils/Message.jsx";
 import { Engine } from "../../utils/Engine.jsx";
 
 window.MonacoEnvironment = {
-  getWorkerUrl: function (workerId, label) {
+  getWorkerUrl: function (_workerId, _label) {
     return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
       self.MonacoEnvironment = {
         baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/'
@@ -18,6 +18,7 @@ window.MonacoEnvironment = {
 };
 export const CodeRunner = () => {
   const { editor, setEditor } = useContext(BojAddonContextStore);
+  const [resizeY, setResizeY] = useState("80vh");
   const editorElement = useRef(null);
   const savedCode = localStorage.getItem(window.location.pathname) ?? "";
 
@@ -50,6 +51,7 @@ export const CodeRunner = () => {
           language: "javascript",
           theme: "vs-dark",
           fontSize: "18px",
+          minimap: false,
           automaticLayout: true,
         })
       );
@@ -61,11 +63,15 @@ export const CodeRunner = () => {
   return (
     <>
       <div id="code-runner" onKeyDown={handleKey}>
-        <InputMenu />
-        <div>
+        <div style={{ height: resizeY }}>
+          <InputMenu />
           <div id="Editor" ref={editorElement}></div>
         </div>
-        <CodeResult clickEvent={sendToEngine} />
+        <CodeResult
+          clickEvent={sendToEngine}
+          dragEvent={setResizeY}
+          resizeY={`calc(100vh - resizeY)`}
+        />
       </div>
     </>
   );

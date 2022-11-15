@@ -11,14 +11,18 @@ export const InputMenu = () => {
   return (
     <div className="boj-addon-menu">
       <div className="boj-addon-nav">
-        <div className="example-popup" onClick={() => setFolded(!folded)}>
+        <button
+          className="example-popup"
+          onClick={() => setFolded(!folded)}
+          onBlur={() => setFolded(true)}
+        >
           입력 예시창
-        </div>
+        </button>
       </div>
       <div className={(folded ? "folded" : "") + " example-hint"}>
         {sampleExample.map((sample, index) => (
           <button
-            onClick={({ target }) => {
+            onMouseDown={({ target }) => {
               setFolded(true);
               editor.setValue(
                 sampleExample[target.className.replace(/[a-zA-Z]/g, "")].code
