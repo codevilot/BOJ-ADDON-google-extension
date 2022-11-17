@@ -16,7 +16,7 @@ export const sampleExample = [
   {
     button:
       "N\narr[0], arr[1], ...arr[n]\n\n첫째 줄에 N, 두 번째 줄에 값 정렬\n",
-    code: 'const [n, ...arr] = require("fs").readFileSync("/dev/stdin").toString().trim().split("/\\s/");',
+    code: 'const [n, ...arr] = require("fs").readFileSync("/dev/stdin").toString().trim().split(/\\s/);',
   },
   {
     button:

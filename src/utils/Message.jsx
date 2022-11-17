@@ -4,10 +4,10 @@ export const Message = (code) => {
     output: [],
     code,
   };
-  [...document.querySelectorAll(`[id*="sample-input-"]`)].forEach(
+  [...document.querySelectorAll(`[id*="sample-input-"]`)]?.forEach(
     ({ textContent }) => msgInfo.input.push(textContent)
   );
-  [...document.querySelectorAll(`[id*="sample-output-"]`)].forEach(
+  [...document.querySelectorAll(`[id*="sample-output-"]`)]?.forEach(
     ({ textContent }) => msgInfo.output.push(textContent)
   );
   return msgInfo;

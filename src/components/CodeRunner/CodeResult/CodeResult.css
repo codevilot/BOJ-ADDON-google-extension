@@ -2,6 +2,7 @@
   position: relative;
   color: white;
   padding: 0.5rem;
+  background: var(--editor-color);
 }
 
 .running-status {
@@ -10,6 +11,7 @@
   padding: 0.1rem 0.5rem;
   margin-left: 1rem;
   border-radius: 5px;
+  background-color: 11ee1e;
 }
 .run_code {
   position: absolute;
@@ -23,8 +25,23 @@
   font-size: 0.7rem;
 }
 .run-result-list {
-  background: #1e1e1e;
-  height: 20vh;
+  background: var(--editor-color);
   overflow-y: scroll;
-  font: white;
+  color: white;
+  height: 100%;
+}
+#resize-horizontal {
+  cursor: row-resize;
+  height: var(--resize-bar);
+  border-top: 1px solid var(--background-color);
+  border-bottom: 1px solid var(--background-color);
+  background: var(--background-color);
+}
+#resize-vertical {
+  position: absolute;
+  cursor: col-resize;
+  width: var(--resize-bar);
+  height: 100%;
+  top: 0;
+  left: 0;
 }

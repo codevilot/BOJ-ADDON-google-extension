@@ -1,30 +1,32 @@
 # BOJ-ADDON
+
 백준 문제풀이 애드온</br></br>
 백준 문제풀이 에드온은 백준 온라인 저지 사이트에서 **바로 문제를 풀 수 있게 도와주는 크롬 익스텐션**입니다.</br></br>
 현재는 **Node.js**로만 문제풀이가 가능하며, 추후 다른 언어 문제풀이도 추가할 예정입니다.</br></br>
 추가적인 요청 사항을 **이슈**에 남겨주시면 추가로 수정하겠습니다. </br></br>
 
 ## FE를 위한 크롬 익스텐션 개발기
+
 https://codevil.tistory.com/222
 
 ## 설치 방법
+
 1. [백준 애드온 크롬 웹 스토어](https://chrome.google.com/webstore/detail/boj-addon/okppngggdhclomfpdomgdpdndfgdljhb?hl=ko) 로 이동해서 크롬 익스텐션을 설치한다.</br>
 2. [백준 온라인 저지 예제](https://www.acmicpc.net/problem/2557)에서 설치가 되었는지 확인한다.</br></br>
 
 ## 사용 방법
+
 1. [백준 온라인 저지 예제](https://www.acmicpc.net/)에서 마음에 풀고 싶은 문제 페이지로 이동한다.</br></br>
-![image](https://user-images.githubusercontent.com/18400730/197908145-63c0f559-4da0-4208-b089-9d58b12f0c6e.png)
-</br>
+   ![image](https://user-images.githubusercontent.com/18400730/197908145-63c0f559-4da0-4208-b089-9d58b12f0c6e.png)
+   </br>
 
 2. 백준 사이트에서 **예제 입력1**값과 비슷한 **입력 예시**를 클릭한다.</br></br>
 
 지금 예시 같은 경우, 첫 줄에 테스트 케이스 개수인 5와 두 번째 줄부터 여섯 번째까지의 값이 필요하기 때문에,</br>
 
-**"첫째 줄에 N, 두 번째줄부터 값 정렬"** 버튼을 선택했다.</br></br> 
-
+**"첫째 줄에 N, 두 번째줄부터 값 정렬"** 버튼을 선택했다.</br></br>
 
 <img src="https://user-images.githubusercontent.com/18400730/197826418-f8a4e4ab-039d-43bd-8844-ea67614bff89.png"  width="300" height="600"/>
-
 
 ```
 const [n, ...arr] = require("fs").readFileSync("/dev/stdin").toString().trim().split("\n");
@@ -44,6 +46,7 @@ const [n, ...arr] = require("fs").readFileSync("/dev/stdin").toString().trim().s
 5. 문제를 실행하면 맞으면 **초록색 글씨**, 문제를 틀리면 **빨간 글씨**가 나온다.</br>
 
 ### 기능 명세
+
 - iframe을 이용하여 백준 문제풀이 페이지에 문제풀이 모나코 에디터를 동적으로 그려줍니다.</br>
 - 모나코 에디터에서 콘솔로 출력될 값을 실행결과 element에 텍스트를 삽입합니다.</br>
 - 백준 문제풀이에 있는 예제 입력을 require("fs").readFileSync("/dev/stdin")을 이용하여 입력한다.</br>
@@ -53,14 +56,19 @@ const [n, ...arr] = require("fs").readFileSync("/dev/stdin").toString().trim().s
 ### 주의 사항
 
 #### 사용 가능 언어
+
 이 크롬 익스텐션은 현재 **Node.js**로만 문제 풀이가 가능합니다.
 
 #### 추가 테스트케이스 추가 시
+
 추가 테스트케이스 값을 입력하고 예제 적용하기 버튼을 눌러야합니다.
 
 ### Release Node
-- 1.0.1
-sample 창이 상단 바를 눌렀을 때 사라지지 않는 현상 수정
-- 1.0.2
-input을 받는 케이스를 /dev/stdin 이외의 환경 추가
 
+- 1.0.1
+  sample 창이 상단 바를 눌렀을 때 사라지지 않는 현상 수정
+- 1.0.2
+  input을 받는 케이스를 /dev/stdin 이외의 환경 추가
+- 1.0.3
+  vanilla javascript에서 react로 리팩토링
+  창크기 변경, 에러 표시
