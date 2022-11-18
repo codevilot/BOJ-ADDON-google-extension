@@ -1,23 +1,23 @@
 .boj-addon-menu {
-  background: #262626;
-  color: white;
-  padding: 0.5rem 0.3rem;
+  background: var(--background-color);
+  color: var(--font-color);
+  padding: 5px 0px;
 }
 .boj-addon-nav {
   display: flex;
   gap: 1rem;
 }
 
-.example-popup {
-  padding-bottom: 0.5rem;
+.example-popup,
+.dark-mode {
   background: none;
   border: 0;
 }
 .example-hint {
   position: absolute;
-  background-color: rgb(50, 50, 50, 1);
+  background-color: var(--sample-color);
   z-index: 1;
-  top: 5rem;
+  top: 40px;
 }
 .example-hint button:hover {
   background: #569cd6;

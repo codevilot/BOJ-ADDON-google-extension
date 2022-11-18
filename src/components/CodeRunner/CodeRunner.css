@@ -1,14 +1,16 @@
 #Editor {
   width: 100%;
-  height: calc(80vh - 6rem);
+  height: calc(100% - 48px);
+  border: 1px solid var(--edge-color);
+  color: var(--font-color);
 }
 #code-runner {
   margin: 0px;
   height: 100vh;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: var(--resize-bar);
+  padding-right: var(--resize-bar);
   border-radius: 10px;
-  background: #1e1e1e;
+  background-color: var(--background-color);
   font-size: 20px;
   z-index: 1;
   position: fixed;
@@ -16,4 +18,5 @@
   top: 0px;
   left: calc(var(--code-window-width) * 1%);
   width: calc((100 - var(--code-window-width)) * 1%);
+  border-left: 1px solid var(--edge-color);
 }

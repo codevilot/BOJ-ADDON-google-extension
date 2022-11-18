@@ -6,7 +6,7 @@ import { CodeResult } from "./CodeResult/CodeResult.jsx";
 import { BojAddonContextStore } from "../../utils/store.jsx";
 import { Message } from "../../utils/Message.jsx";
 import { Engine } from "../../utils/Engine.jsx";
-
+import { setTheme } from "../../utils/Theme.jsx";
 window.MonacoEnvironment = {
   getWorkerUrl: function (_workerId, _label) {
     return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
@@ -49,7 +49,7 @@ export const CodeRunner = () => {
         monaco.editor.create(editorElement.current, {
           value: savedCode,
           language: "javascript",
-          theme: "vs-dark",
+          theme: setTheme(),
           fontSize: "18px",
           minimap: false,
           automaticLayout: true,

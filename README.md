@@ -71,4 +71,6 @@ const [n, ...arr] = require("fs").readFileSync("/dev/stdin").toString().trim().s
   input을 받는 케이스를 /dev/stdin 이외의 환경 추가
 - 1.0.3
   vanilla javascript에서 react로 리팩토링
-  창크기 변경, 에러 표시
+  창크기 상하로 조절 기능 추가
+  에러 표시 추가
+  테마 변경 기능 추가

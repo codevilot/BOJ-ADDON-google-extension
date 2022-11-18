@@ -1,8 +1,7 @@
 .run-navigation {
   position: relative;
-  color: white;
-  padding: 0.5rem;
-  background: var(--editor-color);
+  margin-bottom: 0.5rem;
+  color: var(--font-color);
 }
 
 .running-status {
@@ -11,37 +10,38 @@
   padding: 0.1rem 0.5rem;
   margin-left: 1rem;
   border-radius: 5px;
-  background-color: 11ee1e;
 }
 .run_code {
   position: absolute;
   right: 0;
   top: 0;
   height: min-content;
-  padding: 10px 15px;
+  padding: 5px 15px;
   border: 0;
   color: #fff;
   background-color: #428bca;
-  font-size: 0.7rem;
+  font-size: 12px;
 }
 .run-result-list {
   background: var(--editor-color);
   overflow-y: scroll;
   color: white;
-  height: 100%;
+  height: calc(100% - 100px);
+  border: 1px solid var(--edge-color);
 }
 #resize-horizontal {
   cursor: row-resize;
   height: var(--resize-bar);
   border-top: 1px solid var(--background-color);
   border-bottom: 1px solid var(--background-color);
-  background: var(--background-color);
+  background-color: var(--background-color);
 }
 #resize-vertical {
   position: absolute;
   cursor: col-resize;
   width: var(--resize-bar);
   height: 100%;
+  background-color: var(--background-color);
   top: 0;
   left: 0;
 }

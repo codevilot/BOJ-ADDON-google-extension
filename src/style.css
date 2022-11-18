@@ -1,6 +1,11 @@
 :root {
   --code-window-width: 50;
-  --resize-bar-width: 10;
+  --resize-bar: 30px;
+  --background-color: #454545;
+  --editor-color: #1e1e1e;
+  --font-color: white;
+  --edge-color: #454545;
+  --sample-color: #454545;
 }
 
 .wrapper .container.content {
