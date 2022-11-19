@@ -74,3 +74,5 @@ const [n, ...arr] = require("fs").readFileSync("/dev/stdin").toString().trim().s
   창크기 상하로 조절 기능 추가
   에러 표시 추가
   테마 변경 기능 추가
+- 1.0.4
+  예제가 추가가 안되던 현상 수정

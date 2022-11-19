@@ -4,11 +4,11 @@ export const Message = (code) => {
     output: [],
     code,
   };
-  [...document.querySelectorAll(`[id*="sample-input-"]`)]?.forEach(
-    ({ textContent }) => msgInfo.input.push(textContent)
+  msgInfo.input = [...document.querySelectorAll(`[id*="sample-input-"]`)].map(
+    (input) => input.value ?? input.textContent
   );
-  [...document.querySelectorAll(`[id*="sample-output-"]`)]?.forEach(
-    ({ textContent }) => msgInfo.output.push(textContent)
+  msgInfo.output = [...document.querySelectorAll(`[id*="sample-output-"]`)].map(
+    (output) => output.value ?? output.textContent
   );
   return msgInfo;
 };
