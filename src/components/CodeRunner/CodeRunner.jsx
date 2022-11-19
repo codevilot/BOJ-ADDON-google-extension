@@ -18,7 +18,7 @@ window.MonacoEnvironment = {
 };
 export const CodeRunner = () => {
   const { editor, setEditor } = useContext(BojAddonContextStore);
-  const [resizeY, setResizeY] = useState("80vh");
+  const [resizeY, setResizeY] = useState("75vh");
   const editorElement = useRef(null);
   const savedCode = localStorage.getItem(window.location.pathname) ?? "";
 

@@ -26,7 +26,7 @@
   background: var(--editor-color);
   overflow-y: scroll;
   color: white;
-  height: calc(100% - 100px);
+  height: calc(100% - 70px);
   border: 1px solid var(--edge-color);
 }
 #resize-horizontal {

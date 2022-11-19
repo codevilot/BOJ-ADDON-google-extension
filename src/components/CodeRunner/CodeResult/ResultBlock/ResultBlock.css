@@ -2,6 +2,7 @@
   color: red;
   padding: 0.3rem;
   margin-bottom: 0.3rem;
+  font-size: 18px;
   border-bottom: 1px solid var(--background-color);
 }
 
@@ -9,5 +10,6 @@
   color: green;
   padding: 0.3rem;
   margin-bottom: 0.3rem;
+  font-size: 18px;
   border-bottom: 1px solid var(--background-color);
 }
