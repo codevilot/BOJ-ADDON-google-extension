@@ -7,15 +7,21 @@ import { BojAddonContextStore } from "../../utils/store.jsx";
 import { Message } from "../../utils/Message.jsx";
 import { Engine } from "../../utils/Engine.jsx";
 import { setTheme } from "../../utils/Theme.jsx";
-window.MonacoEnvironment = {
-  getWorkerUrl: function (_workerId, _label) {
-    return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
-      self.MonacoEnvironment = {
-        baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/'
-      };
-      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs/base/worker/workerMain.js');`)}`;
-  },
-};
+window.MonacoEnvironment = { getWorkerUrl: () => proxy };
+let proxy = URL.createObjectURL(
+  new Blob(
+    [
+      `
+    self.MonacoEnvironment = {
+        baseUrl: 'https://unpkg.com/monaco-editor@latest/min/'
+    };
+    importScripts('https://unpkg.com/monaco-editor@latest/min/vs/base/worker/workerMain.js');
+`,
+    ],
+    { type: "text/javascript" }
+  )
+);
+
 export const CodeRunner = () => {
   const { editor, setEditor } = useContext(BojAddonContextStore);
   const [resizeY, setResizeY] = useState("75vh");
@@ -52,6 +58,7 @@ export const CodeRunner = () => {
           theme: setTheme(),
           fontSize: "18px",
           minimap: false,
+          fontLigatures: false,
           automaticLayout: true,
         })
       );
