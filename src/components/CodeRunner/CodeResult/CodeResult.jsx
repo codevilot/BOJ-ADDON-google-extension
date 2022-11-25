@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ResultBlock } from "./ResultBlock/ResultBlock.jsx";
-import { IsJSONString } from "../../../utils/IsJSONString.jsx";
 import "./CodeResult.css";
-export const CodeResult = ({ clickEvent, dragEvent, resizeY }) => {
+export const CodeResult = ({ clickEvent, dragEvent, resizeY, results }) => {
   const [print, setPrint] = useState([]);
   const [resultY, setResultY] = useState(resizeY);
 
@@ -15,13 +14,16 @@ export const CodeResult = ({ clickEvent, dragEvent, resizeY }) => {
     }
   };
 
-  useEffect(() => {
-    window.addEventListener("message", (e) => {
-      const json = IsJSONString(e.data);
-      if (!json || json.input) return;
-      setPrint([...json]);
-    });
-  }, []);
+  // useEffect(() => {
+  //   console.log("set Engine on message");
+  //   Engine.get.onmessage = (e) => {
+  //     const json = IsJSONString(e.data);
+  //     if (!json || json.input) return;
+  //     const msgId = json.pop();
+  //     setPrint([...json]);
+  //     clearTimeout(msgId);
+  //   };
+  // }, [Engine.reset]);
 
   return (
     <div style={{ height: resultY }}>
@@ -45,16 +47,14 @@ export const CodeResult = ({ clickEvent, dragEvent, resizeY }) => {
         </button>
       </div>
       <div className="run-result-list">
-        {print.length < 1
-          ? null
-          : print.map(({ input, output, result }, index) => (
-              <ResultBlock
-                input={input}
-                output={output}
-                result={result}
-                index={index}
-              />
-            ))}
+        {results.map(({ input, output, result }, index) => (
+          <ResultBlock
+            input={input}
+            output={output}
+            result={result}
+            index={index}
+          />
+        ))}
       </div>
     </div>
   );

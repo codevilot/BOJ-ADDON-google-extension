@@ -3,6 +3,7 @@ import * as monaco from "monaco-editor";
 import "./CodeRunner.css";
 import { InputMenu } from "./InputMenu/InputMenu.jsx";
 import { CodeResult } from "./CodeResult/CodeResult.jsx";
+import { IsJSONString } from "../../utils/IsJSONString.jsx";
 import { BojAddonContextStore } from "../../utils/store.jsx";
 import { Message } from "../../utils/Message.jsx";
 import { Engine } from "../../utils/Engine.jsx";
@@ -11,12 +12,8 @@ window.MonacoEnvironment = { getWorkerUrl: () => proxy };
 let proxy = URL.createObjectURL(
   new Blob(
     [
-      `
-    self.MonacoEnvironment = {
-        baseUrl: 'https://unpkg.com/monaco-editor@latest/min/'
-    };
-    importScripts('https://unpkg.com/monaco-editor@latest/min/vs/base/worker/workerMain.js');
-`,
+      `self.MonacoEnvironment = {baseUrl: 'https://unpkg.com/monaco-editor@latest/min/'};
+    importScripts('https://unpkg.com/monaco-editor@latest/min/vs/base/worker/workerMain.js');`,
     ],
     { type: "text/javascript" }
   )
@@ -25,24 +22,38 @@ let proxy = URL.createObjectURL(
 export const CodeRunner = () => {
   const { editor, setEditor } = useContext(BojAddonContextStore);
   const [resizeY, setResizeY] = useState("75vh");
+  const [results, setResults] = useState([]);
   const editorElement = useRef(null);
   const savedCode = localStorage.getItem(window.location.pathname) ?? "";
 
+  const setEvent = () => {
+    Engine.get.onmessage = (e) => {
+      const json = IsJSONString(e.data);
+      if (!json || json.input) return;
+      const msgId = json.pop();
+      setResults([...json]);
+      clearTimeout(msgId);
+    };
+  };
+
   const sendToEngine = () => {
-    Engine.contentWindow.postMessage(
-      JSON.stringify(Message(editor.getValue())),
-      "*"
-    );
+    const msgId = setTimeout(() => {
+      Engine.reset();
+      setEvent();
+    }, 3000);
+    Engine.get.postMessage(JSON.stringify(Message(editor.getValue(), msgId)));
   };
 
   const handleKey = ({ altKey, key }) => {
-    if (altKey && key === "Enter") {
-      sendToEngine();
-    }
+    if (altKey && key === "Enter") sendToEngine();
   };
 
   const handleUnload = () =>
     localStorage.setItem(window.location.pathname, editor.getValue());
+
+  useEffect(() => {
+    setEvent();
+  }, []);
 
   useEffect(() => {
     window.addEventListener("beforeunload", handleUnload);
@@ -76,6 +87,7 @@ export const CodeRunner = () => {
         </div>
         <CodeResult
           clickEvent={sendToEngine}
+          results={results}
           dragEvent={setResizeY}
           resizeY={`calc(100vh - ${resizeY})`}
         />

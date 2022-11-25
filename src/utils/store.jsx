@@ -4,7 +4,6 @@ const exampleNumber = document.querySelectorAll(`[id*="sample-input-"]`).length;
 
 export const BojAddonContext = (props) => {
   const [testCode, setTestCode] = useState([]);
-
   const [editor, setEditor] = useState(null);
   const codeInfo = {
     exampleNumber,

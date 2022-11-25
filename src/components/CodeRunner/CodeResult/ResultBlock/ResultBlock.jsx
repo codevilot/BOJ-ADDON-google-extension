@@ -1,6 +1,16 @@
 import "./ResultBlock.css";
 export const ResultBlock = ({ input, output, result, index }) => {
-  const isCorrect = output.trim() === result.trim();
+  const isCorrect =
+    output
+      .split("\n")
+      ?.map((item) => item.trim())
+      .filter((item) => item !== "")
+      .join("\n") ===
+    result
+      .split("\n")
+      ?.map((item) => item.trim())
+      .filter((item) => item !== "")
+      .join("\n");
   return (
     <>
       <div className={isCorrect ? "correct" : "wrong"}>
