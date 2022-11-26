@@ -23,30 +23,37 @@ export const CodeRunner = () => {
   const { editor, setEditor } = useContext(BojAddonContextStore);
   const [resizeY, setResizeY] = useState("75vh");
   const [results, setResults] = useState([]);
+  const resultsRef = useRef([]);
   const editorElement = useRef(null);
   const savedCode = localStorage.getItem(window.location.pathname) ?? "";
 
+  const updateResults = (array) => {
+    resultsRef.current = array;
+    setResults(resultsRef.current);
+  };
   const setEvent = () => {
     Engine.get.onmessage = (e) => {
       const json = IsJSONString(e.data);
       if (!json || json.input) return;
       const msgId = json.pop();
-      setResults([...json]);
+      updateResults([...json]);
       clearTimeout(msgId);
     };
   };
 
   const sendToEngine = () => {
+    updateResults([{ message: "실행중" }]);
     const msgId = setTimeout(() => {
-      if (!results[0]?.error) {
-        console.log(results[0]);
+      if (!resultsRef.current[0]?.error) {
         Engine.reset();
-        setResults([{ error: "시간 초과" }]);
+        updateResults([{ error: "시간 초과" }]);
         setEvent();
       }
     }, 3000);
-    setResults([{ message: "실행중" }]);
     Engine.get.postMessage(JSON.stringify(Message(editor.getValue(), msgId)));
+    return () => {
+      clearTimeout(msgId);
+    };
   };
 
   const handleKey = ({ altKey, key }) => {
@@ -56,10 +63,8 @@ export const CodeRunner = () => {
   const handleUnload = () =>
     localStorage.setItem(window.location.pathname, editor.getValue());
 
-  const errorHandler = ({ message }) => {
-    setResults([{ error: message }]);
-    setEvent();
-  };
+  const errorHandler = ({ message }) => updateResults([{ error: message }]);
+
   useEffect(() => {
     window.addEventListener("error", errorHandler);
     return () => window.removeEventListener("error", errorHandler);
@@ -71,6 +76,7 @@ export const CodeRunner = () => {
   }, [editor]);
 
   useEffect(() => {
+    setEvent();
     if (editorElement.current) {
       setEditor(
         monaco.editor.create(editorElement.current, {
@@ -90,7 +96,7 @@ export const CodeRunner = () => {
 
   return (
     <>
-      <div id="code-runner" onKeyDown={handleKey}>
+      <div id="code-runner" onKeyUp={handleKey}>
         <div style={{ height: resizeY }}>
           <InputMenu />
           <div id="Editor" ref={editorElement}></div>
