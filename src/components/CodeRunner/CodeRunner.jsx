@@ -9,7 +9,7 @@ import { Message } from "../../utils/Message.jsx";
 import { Engine } from "../../utils/Engine.jsx";
 import { setTheme } from "../../utils/Theme.jsx";
 window.MonacoEnvironment = { getWorkerUrl: () => proxy };
-let proxy = URL.createObjectURL(
+const proxy = URL.createObjectURL(
   new Blob(
     [
       `self.MonacoEnvironment = {baseUrl: 'https://unpkg.com/monaco-editor@latest/min/'};
@@ -38,9 +38,14 @@ export const CodeRunner = () => {
 
   const sendToEngine = () => {
     const msgId = setTimeout(() => {
-      Engine.reset();
-      setEvent();
+      if (!results[0]?.error) {
+        console.log(results[0]);
+        Engine.reset();
+        setResults([{ error: "시간 초과" }]);
+        setEvent();
+      }
     }, 3000);
+    setResults([{ message: "실행중" }]);
     Engine.get.postMessage(JSON.stringify(Message(editor.getValue(), msgId)));
   };
 
@@ -51,8 +56,13 @@ export const CodeRunner = () => {
   const handleUnload = () =>
     localStorage.setItem(window.location.pathname, editor.getValue());
 
-  useEffect(() => {
+  const errorHandler = ({ message }) => {
+    setResults([{ error: message }]);
     setEvent();
+  };
+  useEffect(() => {
+    window.addEventListener("error", errorHandler);
+    return () => window.removeEventListener("error", errorHandler);
   }, []);
 
   useEffect(() => {

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ResultBlock } from "./ResultBlock/ResultBlock.jsx";
 import "./CodeResult.css";
 export const CodeResult = ({ clickEvent, dragEvent, resizeY, results }) => {
-  const [print, setPrint] = useState([]);
+  console.log(results, "CodeResult");
   const [resultY, setResultY] = useState(resizeY);
 
   const resizeCodeWidth = ({ clientX }) => {
@@ -13,18 +13,21 @@ export const CodeResult = ({ clickEvent, dragEvent, resizeY, results }) => {
       );
     }
   };
-
-  // useEffect(() => {
-  //   console.log("set Engine on message");
-  //   Engine.get.onmessage = (e) => {
-  //     const json = IsJSONString(e.data);
-  //     if (!json || json.input) return;
-  //     const msgId = json.pop();
-  //     setPrint([...json]);
-  //     clearTimeout(msgId);
-  //   };
-  // }, [Engine.reset]);
-
+  // const scoring = (results) => {
+  //   return results.filter(
+  //     ({ result, output }) =>
+  //       output
+  //         ?.split("\n")
+  //         ?.map((item) => item.trim())
+  //         .filter((item) => item !== "")
+  //         .join("\n") ===
+  //       result
+  //         ?.split("\n")
+  //         ?.map((item) => item.trim())
+  //         .filter((item) => item !== "")
+  //         .join("\n")
+  //   ).length;
+  // };
   return (
     <div style={{ height: resultY }}>
       <div id="resize-vertical" draggable="true" onDrag={resizeCodeWidth}></div>
@@ -46,16 +49,20 @@ export const CodeResult = ({ clickEvent, dragEvent, resizeY, results }) => {
           실행(ALT(⌘)+ENTER)
         </button>
       </div>
-      <div className="run-result-list">
-        {results.map(({ input, output, result }, index) => (
+      <ResultBlock results={results} />
+      {/* <div className="run-result-list"> */}
+      {/* {scoring()} */}
+      {/* {results.map(({ input, output, result, message, error }, index) => (
           <ResultBlock
             input={input}
             output={output}
             result={result}
             index={index}
+            error={error}
+            message={message}
           />
-        ))}
-      </div>
+        ))} */}
+      {/* </div> */}
     </div>
   );
 };

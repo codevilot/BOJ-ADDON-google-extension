@@ -29,7 +29,7 @@ const runCode = (input, output, code, i) => {
       },
     };
   };
-
+  
   new Function(code)();
   message.push({ input, output, result: console_stack });
 };
@@ -39,10 +39,8 @@ self.onmessage = ({ data }) => {
   input.forEach((item, index) => runCode(input[index], output[index], code, index));
   message.push(msgId)
   self.postMessage(JSON.stringify(message));
-};
-self.onerror = (event) => {
-  self.postMessage(JSON.stringify([{ input: event.type, output: event.message, result: "error" }]));
-};`;
+}; 
+`;
 const workerBlob = new Blob([workerRunner], { type: "text/javascript" });
 const workerBlobUrl = URL.createObjectURL(workerBlob);
 
