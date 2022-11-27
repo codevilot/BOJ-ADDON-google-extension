@@ -5,9 +5,9 @@
 현재는 **Node.js**로만 문제풀이가 가능하며, 추후 다른 언어 문제풀이도 추가할 예정입니다.</br></br>
 추가적인 요청 사항을 **이슈**에 남겨주시면 추가로 수정하겠습니다. </br></br>
 
-## FE를 위한 크롬 익스텐션 개발기
-
-https://codevil.tistory.com/222
+## 백준 애드온 개발기(리뷰)
+[⚡FE를 위한 크롬 익스텐션 개발기](https://codevil.tistory.com/222)
+[⛏️백준 애드온 리액트 리팩토링 리뷰](https://codevil.tistory.com/235)
 
 ## 설치 방법
 
@@ -78,3 +78,5 @@ const [n, ...arr] = require("fs").readFileSync("/dev/stdin").toString().trim().s
   예제가 추가가 안되던 현상 개선
 - 1.0.5
   에디터 자동완성이 안되던 현상 개선
+- 1.0.6
+  무한 루프를 중간에 멈춰주는 기능 추가
