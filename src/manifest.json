@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "BOJ Addon",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "BOJ Addon",
   "author": "Namheon Baek",
 
@@ -9,7 +9,10 @@
     {
       "css": ["style.css"],
       "js": ["main.js"],
-      "matches": ["https://www.acmicpc.net/problem/*"],
+      "matches": [
+        "https://www.acmicpc.net/problem/*",
+        "https://*/contest/problem/*"
+      ],
       "exclude_matches": [
         "https://www.acmicpc.net/problem/status/*",
         "https://www.acmicpc.net/problem/history/*"
