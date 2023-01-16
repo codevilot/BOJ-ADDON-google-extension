@@ -1,8 +1,9 @@
 import { StrictMode } from "react";
 import { render } from "react-dom";
-import { CodeRunner } from "./components/CodeRunner/CodeRunner.jsx";
-import { BojAddonContext } from "./utils/store.jsx";
-import TestCase from "./components/TestCase/TestCase.jsx";
+import { CodeRunner } from "./components/CodeRunner/CodeRunner";
+import { RecoilRoot } from "recoil";
+import TestCase from "./components/TestCase/TestCase";
+
 const sampleRoot = document.createElement("div");
 document
   .getElementById("hint")
@@ -10,11 +11,11 @@ document
 
 render(
   <StrictMode>
-    <BojAddonContext>
+    <RecoilRoot>
       <TestCase />
-
       <CodeRunner />
-    </BojAddonContext>
+    </RecoilRoot>
   </StrictMode>,
+
   sampleRoot
 );

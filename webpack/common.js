@@ -17,15 +17,8 @@ const commonConfig = {
     rules: [
       {
         test: /\.jsx?$/i,
+        use: "babel-loader",
         exclude: /node_modules/,
-        use: {
-          loader: "ts-loader",
-          options: {
-            compilerOptions: {
-              noEmit: false,
-            },
-          },
-        },
       },
       {
         test: /\.css$/i,

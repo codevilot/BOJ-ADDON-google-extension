@@ -1,13 +1,15 @@
-import { useRef, useEffect, useContext, useState } from "react";
+import { useRef, useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import * as monaco from "monaco-editor";
 import "./CodeRunner.css";
 import { InputMenu } from "./InputMenu/InputMenu.jsx";
 import { CodeResult } from "./CodeResult/CodeResult.jsx";
-import { IsJSONString } from "../../utils/IsJSONString.jsx";
-import { BojAddonContextStore } from "../../utils/store.jsx";
-import { Message } from "../../utils/Message.jsx";
-import { Engine } from "../../utils/Engine.jsx";
-import { setTheme } from "../../utils/Theme.jsx";
+
+import { IsJSONString } from "../../utils/IsJSONString";
+import { Message } from "../../utils/Message";
+import { Engine } from "../../utils/Engine";
+import { setTheme } from "../../utils/Theme";
+import { editorState } from "../../utils/atom";
 window.MonacoEnvironment = { getWorkerUrl: () => proxy };
 const proxy = URL.createObjectURL(
   new Blob(
@@ -20,7 +22,7 @@ const proxy = URL.createObjectURL(
 );
 
 export const CodeRunner = () => {
-  const { editor, setEditor } = useContext(BojAddonContextStore);
+  const [editor, setEditor] = useRecoilState(editorState);
   const [resizeY, setResizeY] = useState("75vh");
   const [results, setResults] = useState([]);
   const resultsRef = useRef([]);

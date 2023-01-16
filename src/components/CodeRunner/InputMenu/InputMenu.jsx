@@ -1,11 +1,12 @@
-import { useContext, useState } from "react";
-import { BojAddonContextStore } from "../../../utils/store.jsx";
+import { useState } from "react";
+import { useRecoilValue } from "recoil";
+import { changeTheme } from "../../../utils/Theme";
+import { editorState } from "../../../utils/atom";
 import { sampleExample } from "./sampleExample.jsx";
-import { changeTheme } from "../../../utils/Theme.jsx";
 import "./InputMenu.css";
 
 export const InputMenu = () => {
-  const { editor } = useContext(BojAddonContextStore);
+  const editor = useRecoilValue(editorState);
   const savedCode = localStorage.getItem(window.location.pathname);
   const [folded, setFolded] = useState(savedCode ? true : false);
 

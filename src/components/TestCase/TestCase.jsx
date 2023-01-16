@@ -1,9 +1,9 @@
-import { useContext } from "react";
-import { BojAddonContextStore } from "../../utils/store.jsx";
-
+import { useRecoilState, useRecoilValue } from "recoil";
+import { testCodeState, exampleNumberState } from "../../utils/atom";
 export default function TestCase() {
-  const { testCode, setTestCode, exampleNumber } =
-    useContext(BojAddonContextStore);
+  const [testCode, setTestCode] = useRecoilState(testCodeState);
+  const exampleNumber = useRecoilValue(exampleNumberState);
+
   const handleClick = () => {
     setTestCode([
       ...testCode,
