@@ -81,3 +81,5 @@ const [n, ...arr] = require("fs").readFileSync("/dev/stdin").toString().trim().s
 - 1.0.6
   무한 루프를 중간에 멈춰주는 기능 추가
 - [1.0.7 keyword 텍스트 Symbol 깨짐 현상 개선](https://codevil.tistory.com/265)
+- 1.0.8
+  랜더링 속도 개선
