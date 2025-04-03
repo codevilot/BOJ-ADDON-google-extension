@@ -9,9 +9,14 @@
 }
 
 .example-popup,
-.dark-mode {
+.dark-mode,
+.lang-popup{
   background: none;
   border: 0;
+}
+.connect-error{
+  color:darkgray;
+  cursor:default;
 }
 .example-hint {
   position: absolute;

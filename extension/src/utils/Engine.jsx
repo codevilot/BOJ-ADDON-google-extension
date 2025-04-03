@@ -17,7 +17,7 @@ console.log = function (...args) {
       )
       .join(" ");
 };
-const runCode = (input, output, code, i) => {
+const runCode = (input, expected, code, i) => {
   console_stack = "";
   require = function (fs) {
     process = {
@@ -31,12 +31,12 @@ const runCode = (input, output, code, i) => {
   };
   
   new Function(code)();
-  message.push({ input, output, result: console_stack });
+  message.push({ input, expected, output: console_stack });
 };
 self.onmessage = ({ data }) => {
-  const { code, input, output, msgId } = JSON.parse(data);
+  const { code, input, expected, msgId } = JSON.parse(data);
   message = [];
-  input.forEach((item, index) => runCode(input[index], output[index], code, index));
+  input.forEach((item, index) => runCode(input[index], expected[index], code, index));
   message.push(msgId)
   self.postMessage(JSON.stringify(message));
 }; 

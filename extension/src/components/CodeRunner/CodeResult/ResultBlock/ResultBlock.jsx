@@ -9,7 +9,7 @@ export const ResultBlock = ({ results }) => {
       .join("\n");
   return (
     <div className="run-result-list">
-      {results.map(({ input, output, result, message, error }, index) =>
+      {results?.map(({ input, output, expected, message, error }, index) =>
         message ? (
           <div className="msg">
             <div>{message}</div>
@@ -21,13 +21,13 @@ export const ResultBlock = ({ results }) => {
         ) : (
           <div
             className={
-              removeSpace(output) === removeSpace(result) ? "correct" : "wrong"
+              removeSpace(output) === removeSpace(expected) ? "correct" : "wrong"
             }
           >
             <div>예제 {index + 1}</div>
             <div>입력 값 : {input}</div>
-            <div>입력 결과 : {result}</div>
-            <div>출력 결과 : {output}</div>
+            <div>입력 결과 : {output}</div>
+            <div>출력 결과 : {expected}</div>
           </div>
         )
       )}

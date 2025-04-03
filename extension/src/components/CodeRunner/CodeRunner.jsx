@@ -9,7 +9,8 @@ import { IsJSONString } from "../../utils/IsJSONString";
 import { Message } from "../../utils/Message";
 import { Engine } from "../../utils/Engine";
 import { setTheme } from "../../utils/Theme";
-import { editorState } from "../../utils/atom";
+import { editorState, langState, serverStatusState } from "../../utils/atom";
+import { bojApi } from "../../api/BOJApi.js";
 window.MonacoEnvironment = { getWorkerUrl: () => proxy };
 const proxy = URL.createObjectURL(
   new Blob(
@@ -25,10 +26,15 @@ export const CodeRunner = () => {
   const [editor, setEditor] = useRecoilState(editorState);
   const [resizeY, setResizeY] = useState("75vh");
   const [results, setResults] = useState([]);
+  const [isConnected] = useRecoilState(serverStatusState);
+  const [lang] = useRecoilState(langState)
   const resultsRef = useRef([]);
   const editorElement = useRef(null);
   const savedCode = localStorage.getItem(window.location.pathname) ?? "";
-
+  const codeRun = () => {
+    if(isConnected) sendToCodeRunServer()
+    else sendToEngine()
+  }
   const updateResults = (array) => {
     resultsRef.current = array;
     setResults(resultsRef.current);
@@ -42,7 +48,17 @@ export const CodeRunner = () => {
       clearTimeout(msgId);
     };
   };
+  const sendToCodeRunServer = async () => {
+    updateResults([{ message: "실행중" }]);
 
+    const data = JSON.stringify(Message(editor.getValue().replaceAll("\\\\","\\"), lang))
+    try{
+      const codeResult = await bojApi.run(data)
+      updateResults(codeResult?.results||[])
+    }catch(err){
+      updateResults(JSON.parse(err.message))
+    }
+};
   const sendToEngine = () => {
     updateResults([{ message: "실행중" }]);
     const msgId = setTimeout(() => {
@@ -59,7 +75,7 @@ export const CodeRunner = () => {
   };
 
   const handleKey = ({ altKey, key }) => {
-    if (altKey && key === "Enter") sendToEngine();
+    if (altKey && key === "Enter") codeRun();
   };
 
   const handleUnload = () =>
@@ -95,7 +111,10 @@ export const CodeRunner = () => {
 
     return () => editor.dispose();
   }, [editorElement]);
-
+  useEffect(() => {
+    const monacoLang = lang === "nodejs" ? "javascript" : lang;
+    if (editor) monaco.editor.setModelLanguage(editor.getModel(), monacoLang); 
+  }, [lang]);
   return (
     <>
       <div id="code-runner" onKeyUp={handleKey}>
@@ -104,7 +123,7 @@ export const CodeRunner = () => {
           <div id="Editor" ref={editorElement}></div>
         </div>
         <CodeResult
-          clickEvent={sendToEngine}
+          clickEvent={codeRun}
           results={results}
           dragEvent={setResizeY}
           resizeY={`calc(100vh - ${resizeY})`}

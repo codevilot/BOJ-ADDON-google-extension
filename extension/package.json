@@ -1,10 +1,11 @@
 {
   "name": "boj-addon-google-extension",
-  "version": "1.0.7",
-  "description": "백준 문제풀이 애드온</br></br>\r 백준 문제풀이 에드온은 백준 온라인 저지 사이트에서 **바로 문제를 풀 수 있게 도와주는 크롬 익스텐션**입니다.</br></br>\r 현재는 **Node.js**로만 문제풀이가 가능하며, 추후 다른 언어 문제풀이도 추가할 예정입니다.</br></br>\r 추가적인 요청 사항을 **이슈**에 남겨주시면 추가로 수정하겠습니다. </br></br>",
+  "version": "2.0.0",
+  "description": "백준 문제풀이 애드온</br></br>\r 백준 문제풀이 에드온은 백준 온라인 저지 사이트에서 **바로 문제를 풀 수 있게 도와주는 크롬 익스텐션**입니다.</br></br>\r 현재는 **Node.js, Python, C++**로만 문제풀이가 가능하며, 추후 다른 언어 문제풀이도 추가할 예정입니다.</br></br>\r 추가적인 요청 사항을 **이슈**에 남겨주시면 추가로 수정하겠습니다. </br></br>",
   "type": "module",
   "scripts": {
-    "start": "webpack build -c webpack/prod.js && node fontReplace"
+    "build": "webpack build -c webpack/prod.js && node fontReplace",
+    "dev": "npx nodemon --watch src --ext js,ts,tsx,css,scss,jsx --exec npm run build"
   },
   "repository": {
     "type": "git",
@@ -37,13 +38,14 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.71.5",
     "copy-webpack-plugin": "^11.0.0",
     "json-loader": "^0.5.7",
     "monaco-editor": "^0.34.1",
     "monaco-editor-webpack-plugin": "^7.0.1",
     "npm-run-all": "^4.1.5",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "recoil": "^0.7.2"
   }
 }
