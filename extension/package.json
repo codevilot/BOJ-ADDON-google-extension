@@ -40,6 +40,7 @@
   "dependencies": {
     "@tanstack/react-query": "^5.71.5",
     "copy-webpack-plugin": "^11.0.0",
+    "dompurify": "^3.2.5",
     "json-loader": "^0.5.7",
     "monaco-editor": "^0.34.1",
     "monaco-editor-webpack-plugin": "^7.0.1",

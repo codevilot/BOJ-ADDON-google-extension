@@ -15,6 +15,14 @@ const editorState = atom({
   default: null,
 });
 
+const editorModeState = atom({
+  key: "editorModeState",
+  default: document.querySelector(".loginbar.pull-right").innerText.includes("로그아웃")
+    ?(localStorage.getItem('editor-mode')|| true)==='true'
+    : false,
+});
+
+
 const langState = atom({
   key:'langState',
   default:'nodejs'
@@ -29,4 +37,4 @@ const supportedLangState = atom({
   key:'supportedLangState',
   default:[]
 })
-export { editorState, testCodeState, exampleNumberState, langState, serverStatusState, supportedLangState };
+export { editorState, testCodeState, exampleNumberState, langState, serverStatusState, supportedLangState, editorModeState };

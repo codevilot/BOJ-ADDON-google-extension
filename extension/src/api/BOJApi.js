@@ -26,6 +26,14 @@ export class BOJApi{
             return {connected:false, supportedLang:[]}
         } 
     }
+    async problem(problemNumber){
+        try{
+            const result = await fetch(`http://localhost:100/problem/${problemNumber}`)
+            return await result.text()
+        }catch(e){
+            return ""
+        } 
+    }
 }
 
 export const bojApi = new BOJApi()

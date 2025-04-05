@@ -11,6 +11,7 @@
       "js": ["main.js"],
       "matches": [
         "https://www.acmicpc.net/problem/*",
+        "https://www.acmicpc.net/submit/*",
         "https://*/contest/problem/*"
       ],
       "exclude_matches": [

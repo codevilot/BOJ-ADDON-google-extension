@@ -6,8 +6,67 @@
   --font-color: white;
   --edge-color: #454545;
   --sample-color: #454545;
+
+
 }
 
+
+#problem-body > .col-md-12:has(#hint){
+  display:flex;
+  flex-direction: column-reverse;
+}
+
+#submit_form legend{
+  color : var(--font-color-200);
+}
+body .CodeMirror-gutters{
+  background-color: var(--background-color);
+}
+#logo-header{
+  filter: var(--header-logo-filter);
+}
+body.pace-running #submit_form, body.pace-running #code-runner{
+  display:none;
+}
+.col-md-12 >#submit_form{
+  margin: 0px;
+  height: 100vh;
+  padding-left: var(--resize-bar);
+  padding-right: var(--resize-bar);
+  border-radius: 10px;
+  z-index: 1;
+  position: fixed;
+  background:var(--editor-color);
+  height: calc(100vh);
+  top: 0px;
+  left: calc(var(--code-window-width)* 1%);
+  width: calc((100 - var(--code-window-width))* 1%);
+  border-left: 1px solid var(--edge-color);
+  overflow-y: auto;
+}
+
+.col-md-12 >#submit_form > .form-group > .col-md-2{
+  width:auto;
+} 
+#language_chosen.chosen-container{
+  width:156px!important;
+}
+
+html body{
+  color:var(--font-color-200);  
+}
+body h1,body h2,body h3,body h4,body h5,body h6{
+  color:var(--font-color-300);
+}
+body .header .navbar-default .navbar-nav > li > a {
+  color:var(--font-color-400);
+}
+body p, body li, body li a{
+  color:var(--font-color-100);
+}
+body .wrapper{
+  background-color: var(--editor-color);
+}
 .wrapper .container.content {
   width: calc(var(--code-window-width) * 1%);
   margin: inherit;
@@ -66,6 +125,18 @@
 }
 .sampledata {
   width: -webkit-fill-available;
+  white-space: pre;
+  word-break: normal;
+  word-wrap: normal;
+  font-size: 18px;
+  font-family: Menlo, Monaco, 'Source Code Pro', consolas, monospace;
+  padding: 8px;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  overflow-x: scroll;
 }
 .input_selector {
   transform: translate(100%);

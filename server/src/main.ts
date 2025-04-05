@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 import { createServer, IncomingMessage, ServerResponse } from "http";
+import { get as httpsGet } from "https";
 import { exec, spawn } from "child_process";
 import fs from "fs";
-
+import { load } from "cheerio";
 const PORT = 100;
 
 interface RequestBody {
@@ -112,10 +113,61 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
         return;
     }
 
-    if (req.method === "GET" && req.url === "/healthy") {
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ status: "OK", supported_language: ["python", "cpp", "nodejs"] }));
-        return;
+    if (req.method === "GET") {
+        if(req.url === "/healthy"){
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ status: "OK", supported_language: ["python", "cpp", "nodejs"] }));
+            return;
+        }
+        const match = req?.url?.match(/^\/problem\/(\d+)$/);
+        if (match) {
+            const problemId = match[1];
+            const targetUrl = `https://www.acmicpc.net/problem/${problemId}`;          
+            const options = {
+              headers: {"User-Agent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36",},
+            };
+          
+            httpsGet(targetUrl, options, (acmicpcRes) => {
+                let data = "";
+          
+                acmicpcRes.on("data", (chunk) => {
+                  data += chunk;
+                });
+          
+                acmicpcRes.on("end", () => {
+                    const $ = load(data);
+                
+                    // 전체 row 요소 가져오기
+                    const $row = $(".container.content > .row");
+                
+                    // page-header를 포함한 col-md-12 요소 찾기
+                    const $start = $row.find(".col-md-12:has(.page-header)").first();
+                
+                    if ($start.length) {
+                      // 이 col-md-12부터 뒤의 형제 요소들까지를 포함해서 새 HTML 조각 만들기
+                      const $result = $("<div></div>");
+                      let $current = $start;
+                
+                      while ($current.length) {
+                        $result.append($current.clone());
+                        $current = $current.next();
+                      }
+                
+                      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+                      res.end($result.html());
+                    } else {
+                      res.writeHead(404, { "Content-Type": "text/plain" });
+                      res.end("요소를 찾을 수 없습니다.");
+                    }
+                  });
+              })
+              .on("error", (err) => {
+                res.writeHead(500, { "Content-Type": "text/plain" });
+                res.end(err.toString());
+              });
+          
+            return;
+        }
     }
 
     if (req.method === "POST" && req.url === "/run") {

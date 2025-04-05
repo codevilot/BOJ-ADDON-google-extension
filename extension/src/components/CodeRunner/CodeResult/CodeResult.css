@@ -11,10 +11,22 @@
   margin-left: 1rem;
   border-radius: 5px;
 }
-.run_code {
+#code_submit_form{
+  display:flex
+}
+.introd{
+  font-size: 14px;
+  padding-left: 5px;
+  color: darkgray;
+}
+.code_nav{
   position: absolute;
   right: 0;
   top: 0;
+  display:flex;
+  gap:5px;
+}
+.code_button {
   height: min-content;
   padding: 5px 15px;
   border: 0;

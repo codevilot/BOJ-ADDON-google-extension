@@ -1,8 +1,10 @@
 import { useRecoilState, useRecoilValue } from "recoil";
 import { testCodeState, exampleNumberState } from "../../utils/atom";
-export default function TestCase() {
+import { createPortal } from 'react-dom';
+import { useEffect } from "react";
+export default function TestCase({isSubmitPage}) {
   const [testCode, setTestCode] = useRecoilState(testCodeState);
-  const exampleNumber = useRecoilValue(exampleNumberState);
+  const [exampleNumber, setExampleNumber] = useRecoilState(exampleNumberState);
 
   const handleClick = () => {
     setTestCode([
@@ -13,23 +15,31 @@ export default function TestCase() {
       },
     ]);
   };
+  useEffect(()=>{
+    if(exampleNumber!==0) return;
+    setExampleNumber(document.querySelectorAll(`[id*="sample-input-"]`).length);
+  },[])
   return (
-    <div className="row">
-      {testCode.length < 1
-        ? null
-        : testCode.map(({ input, output }, index) => (
-            <>
-              <TestCase.Input value={input} index={index + exampleNumber + 1} />
-              <TestCase.Output
-                value={output}
-                index={index + exampleNumber + 1}
-              />
-            </>
-          ))}
-      <button className="btn-add-sample" onClick={() => handleClick()}>
-        예제 추가하기
-      </button>
-    </div>
+    <>
+    {createPortal(
+      <div className="row">
+        {testCode.length < 1
+          ? null
+          : testCode.map(({ input, output }, index) => (
+              <>
+                <TestCase.Input value={input} index={index + exampleNumber + 1} />
+                <TestCase.Output
+                  value={output}
+                  index={index + exampleNumber + 1}
+                />
+              </>
+            ))}
+        <button className="btn-add-sample" onClick={() => handleClick()}>
+          예제 추가하기
+        </button>
+      </div>, 
+      document.getElementById('hint').parentNode)}
+    </>
   );
 }
 

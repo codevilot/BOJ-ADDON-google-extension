@@ -11,6 +11,7 @@ import { Engine } from "../../utils/Engine";
 import { setTheme } from "../../utils/Theme";
 import { editorState, langState, serverStatusState } from "../../utils/atom";
 import { bojApi } from "../../api/BOJApi.js";
+import { path } from "../../utils/path.js";
 window.MonacoEnvironment = { getWorkerUrl: () => proxy };
 const proxy = URL.createObjectURL(
   new Blob(
@@ -30,7 +31,7 @@ export const CodeRunner = () => {
   const [lang] = useRecoilState(langState)
   const resultsRef = useRef([]);
   const editorElement = useRef(null);
-  const savedCode = localStorage.getItem(window.location.pathname) ?? "";
+  const savedCode = localStorage.getItem(path.getProblemPathByNumber()) ?? "";
   const codeRun = () => {
     if(isConnected) sendToCodeRunServer()
     else sendToEngine()
@@ -79,7 +80,7 @@ export const CodeRunner = () => {
   };
 
   const handleUnload = () =>
-    localStorage.setItem(window.location.pathname, editor.getValue());
+    localStorage.setItem(path.getProblemPathByNumber(), editor.getValue());
 
   const errorHandler = ({ message }) => updateResults([{ error: message }]);
 

@@ -7,6 +7,9 @@
   display: flex;
   gap: 1rem;
 }
+.boy-addon-nav{
+  user-select: none;
+}
 
 .example-popup,
 .dark-mode,
