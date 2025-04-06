@@ -88,7 +88,7 @@ function SubmitButton() {
         value={getValidCsrfKey()}
       />
 
-        <button type="submit" className="code_button">
+        <button type="submit" className="code_submit_button">
           제출
         </button>
     </form>

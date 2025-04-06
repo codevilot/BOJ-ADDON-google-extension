@@ -26,7 +26,10 @@
   display:flex;
   gap:5px;
 }
-.code_button {
+.code_submit_button{
+  filter: hue-rotate(270deg)
+}
+.code_button, .code_submit_button {
   height: min-content;
   padding: 5px 15px;
   border: 0;
