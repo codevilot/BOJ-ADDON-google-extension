@@ -19,8 +19,14 @@
 #submit_form legend{
   color : var(--font-color-200);
 }
+.CodeMirror-sizer{
+  margin-left:30px!important;
+}
+.CodeMirror-gutter-wrapper{
+  left:-30px!important;
+}
 body .CodeMirror-gutters{
-  background-color: var(--background-color);
+  width:30px;
 }
 #logo-header{
   filter: var(--header-logo-filter);
