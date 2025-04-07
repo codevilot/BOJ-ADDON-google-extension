@@ -83,3 +83,6 @@ const [n, ...arr] = require("fs").readFileSync("/dev/stdin").toString().trim().s
 - [1.0.7 keyword 텍스트 Symbol 깨짐 현상 개선](https://codevil.tistory.com/265)
 - [1.0.8 리랜더링 속도 개선](https://codevil.tistory.com/268)
 - 2.0.0 C++ python 추가
+- 2.0.1 제출 버튼 추가
+- 2.0.2 자바스크립트에서 타입스크립트로 리팩토링
+- 2.0.3 C# 언어 추가
