@@ -1,13 +1,16 @@
 #!/usr/bin/env node
 import { createServer, IncomingMessage, ServerResponse } from "http";
 import { get as httpsGet } from "https";
-import { exec, spawn } from "child_process";
+import { exec, spawn, spawnSync } from "child_process";
 import fs from "fs";
+import path from "path";
+import os from "os";
 import { load } from "cheerio";
+import { removeTempDir } from "./utils/clean";
 const PORT = 100;
 
 interface RequestBody {
-    language: "python" | "cpp" | "nodejs";
+    language: "python" | "cpp" | "nodejs" | "csharp";
     code: string;
     input: string[];
     expected: string[];
@@ -24,6 +27,7 @@ const executableMap: Record<string, string> = {
     python: "python3",
     cpp: "g++",
     nodejs: "node",
+    csharp: "dotnet"
 };
 
 // 실행 파일이 설치되어 있는지 확인
@@ -101,7 +105,75 @@ async function runScript(language: string, code: string, input: string): Promise
         });
     });
 }
+// C# 컴파일 및 실행 함수 추가
+export async function compileAndRunCsharp(
+  code: string,
+  input: string
+): Promise<string> {
+  return new Promise((resolve) => {
+    const timestamp: number = Date.now();
+    const tempDir: string = path.join(os.tmpdir(), `csharp_project_${timestamp}`);
 
+    try {
+      fs.mkdirSync(tempDir, { recursive: true });
+
+      const init = spawn("dotnet", ["new", "console", "--force"], { cwd: tempDir });
+
+      init.on("close", (codeInit: number | null) => {
+        if (codeInit !== 0) {
+          resolve("프로젝트 생성 실패");
+          return;
+        }
+
+        const programPath: string = path.join(tempDir, "Program.cs");
+        fs.writeFileSync(programPath, code);
+
+        const build = spawn("dotnet", ["build"], { cwd: tempDir });
+
+        build.on("close", (codeBuild: number | null) => {
+          if (codeBuild !== 0) {
+            resolve("빌드 실패");
+            return;
+          }
+
+          const run = spawn("dotnet", ["run", "--no-build"], { cwd: tempDir });
+
+          run.stdin.write(input + "\n");
+          run.stdin.end();
+
+          let output: string = "";
+
+          const timeout = setTimeout(() => {
+            run.kill();
+            removeTempDir(tempDir);
+            resolve("시간 초과");
+          }, 5000);
+
+          run.stdout.on("data", (data: Buffer) => {
+            output += data.toString();
+          });
+
+          run.stderr.on("data", (data: Buffer) => {
+            output += data.toString();
+          });
+
+          run.on("close", () => {
+            clearTimeout(timeout);
+            removeTempDir(tempDir);
+            resolve(output.trim());
+          });
+        });
+      });
+
+    } catch (error) {
+      removeTempDir(tempDir);
+      const errorMessage: string = (error instanceof Error) ? error.message : "알 수 없는 오류";
+      resolve("오류 발생: " + errorMessage);
+    }
+  });
+}
+  
+  
 const server = createServer(async (req: IncomingMessage, res: ServerResponse) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -116,7 +188,7 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
     if (req.method === "GET") {
         if(req.url === "/healthy"){
             res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({ status: "OK", supported_language: ["python", "cpp", "nodejs"] }));
+            res.end(JSON.stringify({ status: "OK", supported_language: ["python", "cpp", "nodejs", "csharp"] }));
             return;
         }
         const match = req?.url?.match(/^\/problem\/(\d+)$/);
@@ -205,6 +277,8 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
                         let output = "";
                         if (language === "cpp") {
                             output = await compileAndRunCpp(code, testInput);
+                        } else if (language === "csharp") {
+                            output = await compileAndRunCsharp(code, testInput);
                         } else {
                             output = await runScript(language, code, testInput);
                         }
@@ -232,5 +306,23 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
         res.end(JSON.stringify([{ error: "Not Found" }]));
     }
 });
-
-server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+export function cleanupOldCsharpTempDirs() {
+    const tempDir = os.tmpdir();
+    const files = fs.readdirSync(tempDir);
+  
+    for (const file of files) {
+      if (file.startsWith("csharp_project_")) {
+        const filePath = path.join(tempDir, file);
+        try {
+          fs.rmSync(filePath, { recursive: true, force: true });
+          console.log(`임시 폴더 삭제 완료: ${filePath}`);
+        } catch (err) {
+          console.error(`임시 폴더 삭제 실패: ${filePath}`, err);
+        }
+      }
+    }
+  }
+server.listen(PORT, () => {
+    cleanupOldCsharpTempDirs()
+    console.log(`🚀 Server running on port ${PORT}`)
+});

@@ -64,8 +64,10 @@ function SubmitButton() {
     if (lang === 'cpp') return 84;
     if (lang === 'python') return 28;
     if (lang === 'nodejs') return 17;
+    if (lang === "csharp") return 86;
     if (lang === 'rust') return 94;
     if (lang === 'java') return 93;
+
     return 84;
   };
   function getValidCsrfKey() {

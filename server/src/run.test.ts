@@ -55,7 +55,7 @@ afterAll(() => {
 
 
 
-const sendRequest = async (language: "python" | "cpp" | "nodejs", code: string, input: string[], expected: string[]) => {
+const sendRequest = async (language: "python" | "cpp" | "nodejs" |"csharp", code: string, input: string[], expected: string[]) => {
     return new Promise((resolve, reject) => {
         const data = JSON.stringify({ language, code, input, expected });
 
@@ -135,6 +135,30 @@ describe("Code Execution API", () => {
         );
         expect(response).toEqual({results:[{"expected":"10", "input": "4\n6", "output": "10", "result": "정답"},{"expected": "20", "input": "10\n10", "output": "20", "result": "정답"}]});
     });
-
+    test("C# 코드 실행 테스트", async () => {
+        const response = await sendRequest(
+          "csharp",
+          `
+      using System;
+      
+      public class Program {
+          public static void Main(string[] args) {
+              int a = int.Parse(Console.ReadLine());
+              int b = int.Parse(Console.ReadLine());
+              Console.WriteLine(a + b);
+          }
+      }
+          `.trim(),
+          ["4\n6", "10\n10"], // 입력들
+          ["10", "20"]        // 기대하는 출력들
+        );
+      
+        expect(response).toEqual({
+          results: [
+            { expected: "10", input: "4\n6", output: "10", result: "정답" },
+            { expected: "20", input: "10\n10", output: "20", result: "정답" }
+          ]
+        });
+      });
 });
 
