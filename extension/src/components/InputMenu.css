@@ -1,0 +1,55 @@
+.boj-addon-menu {
+    background: var(--background-color);
+    color: var(--font-color);
+    padding: 5px 0px;
+    overflow-x: scroll;
+  }
+  .boj-addon-nav {
+    display: flex;
+    gap: 1rem;
+  }
+  .boy-addon-nav{
+    user-select: none;
+  }
+  
+  .example-popup,
+  .dark-mode,
+  .lang-popup,
+  .connect-error{
+    font-size:14px;
+    background: none;
+    border: 0;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;  
+  }
+  .connect-error{
+    color:darkgray;
+  }
+  .example-hint {
+    position: absolute;
+    background-color: var(--sample-color);
+    z-index: 1;
+    top: 40px;
+  }
+  .example-hint button:hover {
+    background: #569cd6;
+  }
+  .example-hint button {
+    font-size: 16px;
+    display: block;
+    white-space: pre-line;
+    text-align: left;
+    width: 100%;
+    background: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid white;
+    border-right: 0;
+    border-left: 0;
+    border-top: 0;
+  }
+  .folded {
+    display: none;
+  }
+  

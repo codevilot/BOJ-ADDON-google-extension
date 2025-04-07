@@ -1,0 +1,25 @@
+.msg {
+    color: white;
+    padding: 1rem;
+    margin-bottom: 0.3rem;
+    font-size: 18px;
+    white-space: pre;
+  }
+  .wrong {
+    color: red;
+    padding: 1rem;
+    margin-bottom: 0.3rem;
+    font-size: 18px;
+    border-bottom: 1px solid var(--background-color);
+    white-space: pre;
+  }
+  
+  .correct {
+    color: green;
+    padding: 0.3rem;
+    margin-bottom: 0.3rem;
+    font-size: 18px;
+    border-bottom: 1px solid var(--background-color);
+    white-space: pre;
+  }
+  
