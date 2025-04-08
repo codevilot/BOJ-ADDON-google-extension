@@ -1,4 +1,4 @@
-const SHOULD_REMOVE_TEMP: boolean = false;
+const SHOULD_REMOVE_TEMP: boolean = true;
 import fs from "fs";
 export function removeTempDir(dirPath: string): void {
     if (!SHOULD_REMOVE_TEMP) return;
