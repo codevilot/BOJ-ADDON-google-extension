@@ -86,3 +86,4 @@ const [n, ...arr] = require("fs").readFileSync("/dev/stdin").toString().trim().s
 - 2.0.1 제출 버튼 추가
 - 2.0.2 자바스크립트에서 타입스크립트로 리팩토링
 - 2.0.3 C# 언어 추가
+- 2.0.4 제출 코드 수정 페이지 수정
