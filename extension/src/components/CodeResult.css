@@ -48,7 +48,7 @@
   }
   .run-result-list {
     background: var(--editor-color);
-    overflow-y: scroll;
+    overflow-y: auto;
     color: white;
     height: calc(100% - 70px);
     border: 1px solid var(--edge-color);
