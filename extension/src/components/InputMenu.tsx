@@ -4,20 +4,25 @@ import { editorModeState, editorState, langState, serverStatusState, supportedLa
 import { bojApi } from "../api/bojApi";
 import { useQuery } from "@tanstack/react-query";
 import { sampleCode } from "../const/sampleCode";
-import { isSupportedLang } from "../utils/lang";
+import { getLangByCode, isSupportedLang } from "../utils/lang";
 import { changeTheme } from "../utils/theme";
 import { path } from "../utils/path";
 import "./InputMenu.css"
+import { bojStorage } from "../utils/bojStorage";
 export const InputMenu = () => {
   
   const editor = useRecoilValue(editorState);
-  const savedLang = localStorage.getItem("lang");
+  const savedLang = bojStorage.getItem("lang");
   const [folded, setFolded] = useState(true);
   const [langFolded, setLangFolded] = useState(true)
   const [lang, setLang] = useRecoilState(langState)
   const [isConnected,setIsConnected] = useRecoilState(serverStatusState);
   const [supportedLang, setSupportedLang] = useRecoilState(supportedLangState)
   const [editorMode, setEditorMode] = useRecoilState(editorModeState);
+  const storageValid = bojStorage.isValidPage()
+
+  const pageLang = storageValid? lang 
+                    : getLangByCode((document.querySelector("select#language") as HTMLSelectElement).value) 
   const getServerStatus = async () =>{
     try{
       const {connected, supportedLang} = await bojApi.health()
@@ -32,7 +37,7 @@ export const InputMenu = () => {
   const changeEditor = () =>{
     const updatedMode = !editorMode
     setEditorMode(updatedMode)
-    localStorage.setItem('editor-mode', `${updatedMode}`);
+    bojStorage.setItem('editor-mode', `${updatedMode}`);
   }
   useQuery({
     queryKey: ["health"],
@@ -52,15 +57,15 @@ export const InputMenu = () => {
           입력 예시창
           </button>
           <div className={(folded ? "folded" : "") + " example-hint"}>
-          {sampleCode?.[lang].map((sample, index) => (
+          {sampleCode?.[pageLang].map((sample, index) => (
             <button
                 key={index}
                 className={`ex${index}`}
                 onMouseDown={(e) => {
-                setFolded(true);
-                const className = e.currentTarget.className;
-                const i = Number(className.replace(/[a-zA-Z]/g, ""));
-                editor?.setValue(sampleCode?.[lang]?.[i]?.code || '');
+                  setFolded(true);
+                  const className = e.currentTarget.className;
+                  const i = Number(className.replace(/[a-zA-Z]/g, ""));
+                  editor?.setValue(sampleCode?.[pageLang]?.[i]?.code || '');
                 }}
             >
                 {sample.button}
@@ -75,13 +80,14 @@ export const InputMenu = () => {
           </button>
         </div>
         <div>
-          <button
+        { <button
             className={`lang-popup ${!isConnected?"connect-error":''}`}
             onClick={() => {if(isConnected)setLangFolded(!langFolded)}}
             onBlur={() => setLangFolded(true)}
+            disabled={!storageValid}
           >
-            {lang}
-          </button>
+            {storageValid?lang: document.querySelector(".chosen-single")?.textContent ||'nodejs'}
+          </button>}
           <div className={(langFolded ? "folded" : "") + " example-hint"}>
           {isConnected&&supportedLang.map((langItem, index) => (
             <button
@@ -89,7 +95,7 @@ export const InputMenu = () => {
                 setLangFolded(true);
                 setLang(langItem)
                 editor && editor.setValue('')
-                localStorage.setItem("lang", langItem);
+                bojStorage.setItem("lang", langItem);
               }}
               className={`ex${index}`}
             >

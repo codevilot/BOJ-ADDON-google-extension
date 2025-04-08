@@ -1,6 +1,7 @@
 import { atom } from "recoil";
 import type { editor } from "monaco-editor";
 import { SupportedLang, TestCode } from "../types/types";
+import { bojStorage } from "./bojStorage";
 
 
 const exampleNumberState = atom({
@@ -21,7 +22,7 @@ const editorState = atom<editor.IStandaloneCodeEditor | null>({
 const editorModeState = atom({
   key: "editorModeState",
   default: document.querySelector(".loginbar.pull-right")?.textContent?.includes("로그아웃")
-    ?(localStorage.getItem('editor-mode')|| true)==='true'
+    ?(bojStorage.getItem('editor-mode')|| true)==='true'
     : false,
 });
 

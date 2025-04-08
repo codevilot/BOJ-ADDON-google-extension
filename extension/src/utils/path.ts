@@ -1,8 +1,8 @@
 class Path{
     public problemId(){
         const pathname = window.location.pathname;
-        const match = pathname.match(/(\d+)$/);
-        return match ? match[1] : null;
+        const match = pathname.match(/^\/(submit|problem)\/(\d+)(?:\/(\d+))?/);
+        return match ? match[2] : null;
     }
     public getProblemPathByNumber(){
         return `/problem/${this.problemId()}`

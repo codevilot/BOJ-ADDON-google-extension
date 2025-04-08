@@ -5,6 +5,8 @@ import { editorState, langState, serverStatusState }  from "../utils/atom";
 import { path } from "../utils/path";
 import { Result, SupportedLang } from "../types/types";
 import { CodeResultBlock } from "./CodeResultBlock";
+import { bojStorage } from "../utils/bojStorage";
+import { getLangCode } from "../utils/lang";
 
 
 interface CodeResultProps{
@@ -44,7 +46,7 @@ export const CodeResult = ({ clickEvent, dragEvent, resizeY, results }:CodeResul
         <div className="code_nav">
           <SubmitButton/>
           <button onClick={clickEvent} className="code_button" disabled={disableRunCode}>
-            실행(ALT(⌘)+ENTER)
+            실행(ALT(⌥)+ENTER)
           </button>
         </div>
       </div>
@@ -60,16 +62,7 @@ function SubmitButton() {
   const [lang] = useRecoilState(langState);
   const editor = useRecoilValue(editorState);
 
-  const getLangCode = (lang:SupportedLang) => {
-    if (lang === 'cpp') return 84;
-    if (lang === 'python') return 28;
-    if (lang === 'nodejs') return 17;
-    if (lang === "csharp") return 86;
-    if (lang === 'rust') return 94;
-    if (lang === 'java') return 93;
 
-    return 84;
-  };
   function getValidCsrfKey() {
     const inputs = document.querySelectorAll('input[name="csrf_key"]');
     const validInput = Array.from(inputs).find((input): input is HTMLInputElement =>
@@ -80,7 +73,9 @@ function SubmitButton() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     const form = e.target as HTMLFormElement;
     if(editor)form.source.value = editor.getValue();
-    form.language.value = getLangCode(lang);
+    form.language.value = bojStorage.isValidPage()
+                            ? getLangCode(lang) 
+                            : (document.querySelector("select#language") as HTMLSelectElement).value;
   };
   if(!isSubmitPage) return null;
   return (

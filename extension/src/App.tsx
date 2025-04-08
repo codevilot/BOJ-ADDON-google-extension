@@ -5,6 +5,7 @@ import { editorModeState, serverStatusState } from "./utils/atom";
 import TestCase from "./components/TestCase";
 import { BOJProblem } from "./components/BOJProblem";
 import { path } from "./utils/path";
+import { bojStorage } from "./utils/bojStorage";
 
 interface AppProps{
   problemId : string | null;
@@ -29,7 +30,7 @@ export function App({ problemId }:AppProps) {
     const handleClick = () => {
       const updatedMode = !editorMode
       setEditorMode(updatedMode)
-      localStorage.setItem('editor-mode', `${updatedMode}`);
+      bojStorage.setItem('editor-mode', `${updatedMode}`);
     };
 
     if (legend) legend.addEventListener('click', handleClick);
