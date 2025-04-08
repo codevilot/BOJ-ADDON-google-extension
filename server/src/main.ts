@@ -7,6 +7,7 @@ import path from "path";
 import os from "os";
 import { load } from "cheerio";
 import { removeTempDir } from "./utils/clean";
+import { platform } from "os";
 const PORT = 100;
 
 interface RequestBody {
@@ -32,11 +33,13 @@ const executableMap: Record<string, string> = {
 
 // 실행 파일이 설치되어 있는지 확인
 async function isExecutableInstalled(command: string): Promise<boolean> {
-    return new Promise((resolve) => {
-        exec(`which ${command}`, (error, stdout) => {
-            resolve(Boolean(stdout.trim()) && !error);
-        });
-    });
+  const cmd = platform() === "win32" ? `where ${command}` : `which ${command}`;
+  return new Promise((resolve) => {
+      exec(cmd, (error, stdout) => {
+          console.error(error);
+          resolve(Boolean(stdout.trim()) && !error);
+      });
+  });
 }
 
 // C++ 코드 컴파일 및 실행
