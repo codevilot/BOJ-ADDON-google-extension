@@ -10,7 +10,9 @@ import { jsEngine } from "../utils/jsEngine";
 import { setTheme } from "../utils/theme";
 import { InputMenu } from "./InputMenu";
 import { CodeResult } from "./CodeResult";
-import { Result } from "../types/types";
+import { Result, SupportedLang } from "../types/types";
+import { bojStorage } from "../utils/bojStorage";
+import { getLangByCode } from "../utils/lang";
 
 window.MonacoEnvironment = { getWorkerUrl: () => proxy };
 const proxy = URL.createObjectURL(
@@ -29,10 +31,11 @@ export const CodeRunner = () => {
   const [resizeY, setResizeY] = useState("75vh");
   const [results, setResults] = useState<Result[]>([]);
   const [isConnected] = useRecoilState(serverStatusState);
-  const [lang] = useRecoilState(langState)
+  
+  const [lang, setLang] = useRecoilState(langState)
   const resultsRef = useRef<Result[]>([]);
   const editorElement = useRef(null);
-  const savedCode = localStorage.getItem(path.getProblemPathByNumber()) ?? "";
+  const initialCode = bojStorage.getInitialCode();
   const codeRun = () => {
     if(isConnected) sendToCodeRunServer()
     else sendToEngine()
@@ -54,7 +57,10 @@ export const CodeRunner = () => {
   const sendToCodeRunServer = async () => {
     updateResults([{ message: "실행중" }]);
     if(!editor) return
-    const data = JSON.stringify(formatMessage(editor.getValue().replaceAll("\\\\","\\"), lang))
+    const pageLang = bojStorage.isValidPage() 
+                      ? lang 
+                      : getLangByCode((document.querySelector("select#language") as HTMLSelectElement).value) 
+    const data = JSON.stringify(formatMessage(editor.getValue().replaceAll("\\\\","\\"), pageLang))
     try{
       const codeResult = await bojApi.run(data)
       updateResults(codeResult?.results||[])
@@ -84,7 +90,7 @@ export const CodeRunner = () => {
   };
 
   const handleUnload = () =>
-    editor && localStorage.setItem(path.getProblemPathByNumber(), editor.getValue());
+    editor && bojStorage.setItem(path.getProblemPathByNumber(), editor.getValue());
 
   const errorHandler = (event: ErrorEvent) => {
     updateResults([{ error: event.message }]);
@@ -105,7 +111,7 @@ export const CodeRunner = () => {
     if (editorElement.current) {
       setEditor(
         monaco.editor.create(editorElement.current, {
-          value: savedCode,
+          value: initialCode,
           language: "javascript",
           theme: setTheme(),
           fontSize: 18,
@@ -113,9 +119,7 @@ export const CodeRunner = () => {
           fontLigatures: false,
           automaticLayout: true,
         })
-
       );
-
     }
 
     return () =>{editor && editor.dispose();}

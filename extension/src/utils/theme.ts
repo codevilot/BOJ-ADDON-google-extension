@@ -1,4 +1,5 @@
 import * as monaco from "monaco-editor";
+import { bojStorage } from "./bojStorage";
 
 const themeObject = {
   "vs-dark": {
@@ -38,7 +39,7 @@ const themeObject = {
 };
 
 export const changeThemeProperty = () => {
-    const mode = (localStorage.getItem("mode") ?? "vs-dark") as keyof typeof themeObject;
+    const mode = (bojStorage.getItem("mode") ?? "vs-dark") as keyof typeof themeObject;
     const theme = themeObject[mode];
   
     Object.entries(theme.colorset).forEach(([key, value]) => {
@@ -49,17 +50,17 @@ export const changeThemeProperty = () => {
   };
   
   export const setTheme = () => {
-    if (!localStorage.getItem("mode")) {
-      localStorage.setItem("mode", "vs-dark");
+    if (!bojStorage.getItem("mode")) {
+      bojStorage.setItem("mode", "vs-dark");
     }
     return changeThemeProperty();
   };
   
   export const changeTheme = () => {
-    const mode = (localStorage.getItem("mode") ?? "vs-dark") as keyof typeof themeObject;
+    const mode = (bojStorage.getItem("mode") ?? "vs-dark") as keyof typeof themeObject;
     const theme = themeObject[mode];
   
     monaco.editor.setTheme(theme.to);
-    localStorage.setItem("mode", theme.to);
+    bojStorage.setItem("mode", theme.to);
     changeThemeProperty();
   };  

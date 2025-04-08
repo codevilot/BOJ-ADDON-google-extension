@@ -23,6 +23,10 @@
     overflow: hidden;
     text-overflow: ellipsis;  
   }
+  .lang-popup:disabled{
+    opacity: 0.5; 
+    pointer-events: none;
+  }
   .connect-error{
     color:darkgray;
   }
