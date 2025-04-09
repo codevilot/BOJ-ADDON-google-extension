@@ -1,6 +1,6 @@
 # BOJ Server
 
-`boj-server`는 [BOJ Addon](https://chromewebstore.google.com/search/BOJ%20Addon?hl=ko)과 함께 사용하여 백준에서 C++과 Python을 에디터 없이 실행할 수 있도록 도와주는 서버입니다.
+`boj-server`는 [BOJ Addon](https://chromewebstore.google.com/search/BOJ%20Addon?hl=ko)과 함께 사용하여 백준에서 C++, C#, Python, Nodejs를 에디터 없이 실행할 수 있도록 도와주는 서버입니다.
 
 ## 설치 및 실행
 
@@ -20,7 +20,7 @@ npx boj-server
 
 1. [BOJ Addon](https://chromewebstore.google.com/search/BOJ%20Addon?hl=ko)을 설치합니다.
 2. 터미널에서 `npx boj-server`를 실행합니다.
-3. 백준 문제 페이지에서 BOJ Addon을 통해 C++ 및 Python 코드를 실행합니다.
+3. 백준 문제 페이지에서 언어(C++, C#, Python, Nodejs)를 선택하고 코드를 실행합니다.
 
 ## 캐시 삭제
 
