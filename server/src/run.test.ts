@@ -36,7 +36,7 @@ beforeAll(async () => {
             stdio: ["ignore", "ignore", "pipe"], // stderr만 읽기
         });
 
-        serverProcess.stderr.on("data", (data) => {
+        serverProcess.stderr.on("data", (data: Buffer) => {
             console.error("❌ 서버 오류:", data.toString());
         });
 
