@@ -285,12 +285,12 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
                         } else {
                             output = await runScript(language, code, testInput);
                         }
-
+                        const expectedValue =  expected[index].trim()
                         return {
                             input: testInput,
                             output,
-                            expected: expected[index],
-                            result: output === expected[index] ? "정답" : "오답",
+                            expected: expectedValue,
+                            result: output.trim() === expectedValue ? "정답" : "오답",
                         };
                     })
                 );
