@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 import { createServer, IncomingMessage, ServerResponse } from "http";
 import { get as httpsGet } from "https";
-import { exec, spawn, spawnSync } from "child_process";
+import { exec, spawn } from "child_process";
 import fs from "fs";
 import path from "path";
 import os from "os";
 import { load } from "cheerio";
 import { removeTempDir } from "./utils/clean";
 import { platform } from "os";
+import packageJson from '../package.json';
 const PORT = 100;
 
 interface RequestBody {
@@ -327,5 +328,5 @@ export function cleanupOldCsharpTempDirs() {
   }
 server.listen(PORT, () => {
     cleanupOldCsharpTempDirs()
-    console.log(`🚀 Server running on port ${PORT}`)
+    console.log(`🚀 BOJ Server ${packageJson.version} running on port ${PORT}`)
 });
