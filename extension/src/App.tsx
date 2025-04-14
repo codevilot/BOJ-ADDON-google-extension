@@ -13,6 +13,7 @@ interface AppProps{
 export function App({ problemId }:AppProps) {
   const isConnected = useRecoilValue(serverStatusState);
   const [editorMode, setEditorMode] = useRecoilState(editorModeState);
+  const hasProblem = !path.getIsProblemPage() && problemId
   if(path.getIsLogin() && path.getIsProblemPage() &&isConnected)
     window.location.replace(`/submit/${problemId}`);
 
@@ -44,7 +45,7 @@ export function App({ problemId }:AppProps) {
   },[editorMode])
   return (
     <>
-      {problemId ? <BOJProblem problemId={problemId} /> : <TestCase />}
+      {hasProblem ? <BOJProblem problemId={problemId} /> : <TestCase />}
       <CodeRunner />
     </>
   );

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "BOJ Addon",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "BOJ Addon",
   "author": "Namheon Baek",
   "content_scripts": [

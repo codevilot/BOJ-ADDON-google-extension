@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import "./CodeResult.css";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { editorState, langState, serverStatusState }  from "../utils/atom";
@@ -7,6 +7,7 @@ import { Result, SupportedLang } from "../types/types";
 import { CodeResultBlock } from "./CodeResultBlock";
 import { bojStorage } from "../utils/bojStorage";
 import { getLangCode } from "../utils/lang";
+import { removeSpace } from "../utils/format";
 
 
 interface CodeResultProps{
@@ -17,32 +18,66 @@ interface CodeResultProps{
 }
 export const CodeResult = ({ clickEvent, dragEvent, resizeY, results }:CodeResultProps) => {
   const [resultY, setResultY] = useState(resizeY);
+  const [isDraggingX, setIsDraggingX] = useState(false)
+  const [isDraggingY, setIsDraggingY] = useState(false)
   const isConnected = useRecoilValue(serverStatusState);
-
+  const passedCount = results.reduce(
+    (acc, cur) =>
+      acc + (removeSpace(cur.output || '') === removeSpace(cur.expected || '') ? 1 : 0),
+    0
+  );
+  const resultCount = results.length;
   const disableRunCode = !path.getIsProblemPage() && !isConnected
-  const resizeCodeWidth = ({ clientX }:React.DragEvent) => {
-    if (clientX !== 0) {
-      document.documentElement.style.setProperty(
-        "--code-window-width",
-        `${(clientX / window.innerWidth) * 100}`
-      );
-    }
-  };
-  const resizeResultHeight =({clientY} :React.DragEvent) =>{
+
+
+  const handleYMouseDown = () =>setIsDraggingY(true)
+  const handleYMouseUp = () => setIsDraggingY(false)
+  const handleYMouseMove = ({clientY} :MouseEvent) =>{
+    if(!isDraggingY) return
     if (clientY !== 0) {
       dragEvent(`${clientY}px`);
       setResultY(`calc( 100vh - ${clientY}px )`);
     }
   }
+
+  const handleXMouseDown = () =>setIsDraggingX(true)
+  const handleXMouseUp = () => setIsDraggingX(false)
+  const handleXMouseMove = ({clientX} :MouseEvent) =>{
+    if(!isDraggingX) return
+    if (clientX !== 0) {
+      document.documentElement.style.setProperty(
+        "--code-window-width",
+        `${((clientX+10) / window.innerWidth) * 100}`
+      );
+    }
+  }
+
+  useEffect(()=>{
+    document.addEventListener("mouseup", handleXMouseUp)
+    document.addEventListener("mousemove", handleXMouseMove)
+    return () =>  {
+      document.removeEventListener("mouseup", handleXMouseUp)
+      document.removeEventListener("mousemove", handleXMouseMove)
+    }
+  },[isDraggingX])
+
+  useEffect(()=>{
+    document.addEventListener("mouseup", handleYMouseUp)
+    document.addEventListener("mousemove", handleYMouseMove)
+    return () =>  {
+      document.removeEventListener("mouseup", handleYMouseUp)
+      document.removeEventListener("mousemove", handleYMouseMove)
+    }
+  },[isDraggingY])
   return (
     <div style={{ height: resultY }}>
-      <div id="resize-vertical" onDrag={resizeCodeWidth}></div>
-      <div
-        id="resize-horizontal"
-        onDrag={resizeResultHeight}
+      <div id="resize-vertical" onMouseDown={handleXMouseDown}></div>
+      <div id="resize-horizontal" onMouseDown={handleYMouseDown}
       >{!isConnected&&<div className="introd">npx boj-server를 터미널에 입력해주세요.</div>}</div>
       <div className="run-navigation">
-        <span>실행결과 </span>
+        <span>실행결과 {
+        resultCount>0 && !results?.[0]?.message &&
+        <span className={resultCount===passedCount ? "correct" : "wrong"}>{resultCount}개 중 {passedCount}개 정답</span>}</span>
         <div className="code_nav">
           <SubmitButton/>
           <button onClick={clickEvent} className="code_button" disabled={disableRunCode}>
@@ -56,7 +91,6 @@ export const CodeResult = ({ clickEvent, dragEvent, resizeY, results }:CodeResul
 };
 
 function SubmitButton() {
-  const match = window.location.pathname.match(/\/submit\/(\d+)/);
   const problemId = path.problemId();
   const isSubmitPage = path.getIsSubmitPage()
   const [lang] = useRecoilState(langState);

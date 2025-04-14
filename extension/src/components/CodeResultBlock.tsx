@@ -1,13 +1,8 @@
 import { Result } from "../types/types";
+import { removeSpace } from "../utils/format";
 import "./CodeResultBlock.css";
 
 export const CodeResultBlock = ({ results }:{results : Result[]}) => {
-  const removeSpace = (str:string) =>
-    str
-      ?.split("\n")
-      ?.map((item) => item.trim())
-      .filter((item) => item !== "")
-      .join("\n");
   return (
     <div className="run-result-list">
       {results?.map(({ input, output, expected, message, error }:Result, index:number) =>{
