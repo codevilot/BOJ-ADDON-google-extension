@@ -78,7 +78,7 @@ async function compileAndRunCpp(code: string, input: string): Promise<string> {
             executeProcess.on("close", () => {
                 clearTimeout(timeout);
                 fs.unlink(execFileName, () => {});
-                resolve(output.trim());
+                resolve(output.trimEnd());
             });
         });
     });
