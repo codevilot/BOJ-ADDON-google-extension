@@ -31,7 +31,4 @@ export const isJSONString = (string:string) => {
   }
 };
 
-export const removeSpace = (str:string) =>str?.split("\n")
-                                             ?.map((item) => item.trim())
-                                             .filter((item) => item !== "")
-                                             .join("\n");
+export const removeSpace = (str:string) =>str.trimEnd();
