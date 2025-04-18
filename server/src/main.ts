@@ -47,7 +47,7 @@ async function isExecutableInstalled(command: string): Promise<boolean> {
 async function compileAndRunCpp(code: string, input: string): Promise<string> {
     return new Promise((resolve) => {
         const execFileName = `/tmp/cpp_exec_${Date.now()}`;
-        const compileProcess = spawn("g++", ["-x", "c++", "-", "-o", execFileName]);
+        const compileProcess = spawn("g++", ["-std=c++17", "-x", "c++", "-", "-o", execFileName]);
 
         compileProcess.stdin.write(code);
         compileProcess.stdin.end();
