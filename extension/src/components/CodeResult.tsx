@@ -104,13 +104,30 @@ function SubmitButton() {
     );
     return validInput?.value || null;
   }
+  function getGRecaptchaResponse(){
+    const wrapper = document.getElementById("g-recaptcha-response-100000") as HTMLTextAreaElement;
+    return wrapper?.value || null;
+  }
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     const form = e.target as HTMLFormElement;
+    form["g-recaptcha-response"].value = getGRecaptchaResponse();
     if(editor)form.source.value = editor.getValue();
     form.language.value = bojStorage.isValidPage()
                             ? getLangCode(lang) 
                             : (document.querySelector("select#language") as HTMLSelectElement).value;
+    console.log(form)
   };
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'http://localhost:100/enterprise.js';
+    script.async = true;
+    document.body.appendChild(script);
+
+    // 컴포넌트 언마운트 시 스크립트 제거
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
   if(!isSubmitPage) return null;
   return (
     <form
@@ -118,7 +135,8 @@ function SubmitButton() {
       action=""
       method="POST"
       onSubmit={handleSubmit}
-    >
+    >                      
+      <input type="hidden" name="g-recaptcha-response" value={getGRecaptchaResponse()||""} />
       <input type="hidden" name="problem_id" value={problemId||""} />
       <input type="hidden" name="language" value="" />
       <input type="hidden" name="code_open" value="open" />

@@ -190,6 +190,21 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
     }
 
     if (req.method === "GET") {
+        if(req.url =="/enterprise.js"){
+          const jsCode = `
+            const siteKey = "6Le_rx4rAAAAAATDXRag3GgpO641c5wodH30zQh1";
+            if (typeof window.grecaptcha !== 'undefined' && typeof window.grecaptcha.enterprise !== 'undefined') {
+              window.grecaptcha.enterprise.execute(siteKey, { action: 'submit' })
+            } else {
+              console.warn('grecaptcha가 아직 로드되지 않았습니다. 500ms 후에 다시 시도합니다.');
+              setTimeout(function() {
+                executeRecaptcha(siteKey);
+              }, 500);
+            }`
+          res.setHeader('Content-Type', 'application/javascript');
+          res.end(jsCode);
+          return;
+        }
         if(req.url === "/healthy"){
             res.writeHead(200, { "Content-Type": "application/json" });
             res.end(JSON.stringify({ status: "OK", supported_language: ["python", "cpp", "nodejs", "csharp"] }));
