@@ -88,3 +88,5 @@ const [n, ...arr] = require("fs").readFileSync("/dev/stdin").toString().trim().s
 - 2.0.3 C# 언어 추가
 - 2.0.4 제출 코드 수정 페이지 수정
 - 2.0.5 리사이즈 수정, 전체 스코어 표시
+- 2.0.6 문제 정오 output의 앞의 빈 공백을 trim을 하지 않도록 수정
+- 2.0.7 문제 제출시 grecaptcha를 body에 추가하여 전송
