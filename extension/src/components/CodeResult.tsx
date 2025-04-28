@@ -115,7 +115,6 @@ function SubmitButton() {
     form.language.value = bojStorage.isValidPage()
                             ? getLangCode(lang) 
                             : (document.querySelector("select#language") as HTMLSelectElement).value;
-    console.log(form)
   };
   useEffect(() => {
     const script = document.createElement('script');
