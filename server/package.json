@@ -6,7 +6,7 @@
   "bin": "./dist/main.js",
   "scripts": {
     "start": "node dist/main.js",
-    "dev": "ts-node src/main.ts",
+    "dev": "npx nodemon --watch src --ext js,ts,tsx --exec ts-node src/main.ts",
     "prepublish": "tsc",
     "test": "jest"
   },
